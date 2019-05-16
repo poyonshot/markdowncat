@@ -7,6 +7,10 @@
 		"vscode": "^1.33.0"
 	},
 	"categories": ["Programming Languages", "Other"],
+	"author": {
+		"name": "poyonshot"
+	},
+	"publisher": "poyonshot",
 	"icon": "images/icon-markdowncat-256.png",
 	"galleryBanner": {
 	  "color": "#C80000",
