@@ -1,25 +1,57 @@
 {
 	"name": "markdowncat",
-	"displayName": "markdowncat",
-	"description": "",
+	"displayName": "MarkdownCat",
+	"description": "Generate single markdown file by merging a set of markdown files.",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.33.0"
 	},
-	"categories": [
-		"Other"
-	],
+	"categories": ["Programming Languages", "Other"],
+	"icon": "images/icon-markdowncat-256.png",
+	"galleryBanner": {
+	  "color": "#C80000",
+	  "theme": "light"
+	},
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"onLanguage:poyonshotmdcat"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [
-			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
+		"configuration": {
+			"type": "object",
+			"title": "markdowncat configuration",
+			"properties": {
+				"markdowncat.color.comment": {
+					"type": "string",
+					"default": "auto",
+					"description": "comment color."
+				}
 			}
-		]
+		},
+		"commands": [{
+				"command": "extension.expandMdcat",
+				"title": "Generate markdown file"
+			},{
+				"command": "extension.insertNewPage",
+				"title": "New page"
+			}
+		],
+		"menus": {
+			"editor/context": [{
+				"when": "resourceExtname == .mdcat",
+				"command": "extension.insertNewPage",
+				"group": "YourGroup@1"
+			}, {
+				"when": "resourceExtname == .mdcat",
+				"command": "extension.expandMdcat",
+				"group": "YourGroup@1"
+			}]
+		},
+		"languages": [{
+			"id": "poyonshotmdcat",
+			"aliases": [ "poyonshotmdcat", "mdcat" ],
+			"extensions": [ ".mdcat" ]
+		}]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
@@ -34,5 +66,15 @@
 		"tslint": "^5.12.1",
 		"@types/node": "^10.12.21",
 		"@types/mocha": "^2.2.42"
-	}
+	},
+	"license": "SEE LICENSE IN LICENSE.txt",
+	"bugs": {
+	  "url": "https://github.com/poyonshot/markdowncat/issues",
+	  "email": "poyonshot@gmail.com"
+	},
+	"repository": {
+	  "type": "git",
+	  "url": "https://github.com/poyonshot/markdowncat.git"
+	},
+	"homepage": "http://d.hatena.ne.jp/poyonshot/"
 }
