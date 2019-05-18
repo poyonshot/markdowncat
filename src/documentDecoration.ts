@@ -2,24 +2,23 @@ import * as vscode from "vscode";
 
 export default class DocumentDecoration
 {
-    private timeout: NodeJS.Timer | undefined = undefined;
+    // private timeout: NodeJS.Timer | undefined = undefined;
 
     public static commentColor = "";
 
-    public update() {
+    public update(editor: vscode.TextEditor | undefined) {
         
+        if (!editor) {
+            return;
+        }
+
         const lineCommentDecorationType = vscode.window.createTextEditorDecorationType({
             color: DocumentDecoration.commentColor
         });
 
-        let editor = vscode.window.activeTextEditor; // エディタ取得
-        if (!editor) {
-            return;
-        }
         const regEx = /\/\*[\s\S]*?\*\/|\/\/.*/g;
         const text = editor.document.getText();
         const lineComment: vscode.DecorationOptions[] = [];
-        const largeNumbers: vscode.DecorationOptions[] = [];
         let match;
         while (match = regEx.exec(text)) {
             const startPos = editor.document.positionAt(match.index);
@@ -30,11 +29,11 @@ export default class DocumentDecoration
         editor.setDecorations(lineCommentDecorationType, lineComment);
     }
 
-    public triggerUpdateDecorations() {
-        if (this.timeout) {
-            clearTimeout(this.timeout);
-            this.timeout = undefined;
-        }
-        this.timeout = setTimeout(this.update, 500);
-    }
+    // public triggerUpdateDecorations() {
+    //     if (this.timeout) {
+    //         clearTimeout(this.timeout);
+    //         this.timeout = undefined;
+    //     }
+    //     this.timeout = setTimeout(this.update, 500);
+    // }
 }
