@@ -2,19 +2,22 @@
 	"name": "markdowncat",
 	"displayName": "MarkdownCat",
 	"description": "Generate single markdown file by merging a set of markdown files.",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"engines": {
 		"vscode": "^1.33.0"
 	},
-	"categories": ["Programming Languages", "Other"],
+	"categories": [
+		"Programming Languages",
+		"Other"
+	],
 	"author": {
 		"name": "poyonshot"
 	},
 	"publisher": "poyonshot",
 	"icon": "images/icon-markdowncat-256.png",
 	"galleryBanner": {
-	  "color": "#10F050",
-	  "theme": "light"
+		"color": "#10F050",
+		"theme": "light"
 	},
 	"activationEvents": [
 		"onLanguage:poyonshotmdcat"
@@ -32,30 +35,42 @@
 				}
 			}
 		},
-		"commands": [{
+		"commands": [
+			{
 				"command": "extension.expandMdcat",
 				"title": "Generate markdown file"
-			},{
+			},
+			{
 				"command": "extension.insertNewPage",
 				"title": "New page"
 			}
 		],
 		"menus": {
-			"editor/context": [{
-				"when": "resourceExtname == .mdcat",
-				"command": "extension.insertNewPage",
-				"group": "YourGroup@1"
-			}, {
-				"when": "resourceExtname == .mdcat",
-				"command": "extension.expandMdcat",
-				"group": "YourGroup@1"
-			}]
+			"editor/context": [
+				{
+					"when": "resourceExtname == .mdcat",
+					"command": "extension.insertNewPage",
+					"group": "YourGroup@1"
+				},
+				{
+					"when": "resourceExtname == .mdcat",
+					"command": "extension.expandMdcat",
+					"group": "YourGroup@1"
+				}
+			]
 		},
-		"languages": [{
-			"id": "poyonshotmdcat",
-			"aliases": [ "poyonshotmdcat", "mdcat" ],
-			"extensions": [ ".mdcat" ]
-		}]
+		"languages": [
+			{
+				"id": "poyonshotmdcat",
+				"aliases": [
+					"poyonshotmdcat",
+					"mdcat"
+				],
+				"extensions": [
+					".mdcat"
+				]
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
@@ -73,12 +88,12 @@
 	},
 	"license": "SEE LICENSE IN LICENSE.txt",
 	"bugs": {
-	  "url": "https://github.com/poyonshot/markdowncat/issues",
-	  "email": "poyonshot@gmail.com"
+		"url": "https://github.com/poyonshot/markdowncat/issues",
+		"email": "poyonshot@gmail.com"
 	},
 	"repository": {
-	  "type": "git",
-	  "url": "https://github.com/poyonshot/markdowncat.git"
+		"type": "git",
+		"url": "https://github.com/poyonshot/markdowncat.git"
 	},
 	"homepage": "http://d.hatena.ne.jp/poyonshot/"
 }
