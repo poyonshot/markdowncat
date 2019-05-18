@@ -17,19 +17,18 @@ export default class FilePathCompletionProvider implements vscode.CompletionItem
         // add folders
         let rootPathLen = vscode.workspace.rootPath!.length + 2;
 
-        let targetItems = ["md", "css"];
+        let targetItems = [".md", ".css"];
 
         // add markdown files
         vscode.workspace.findFiles("**/*.*").then((urls) => {
             return urls.map((url) => {
                 return url.path.substr(rootPathLen)!
-
-                //return path.basename(url.path)
             })
         }).then((filenames) => {
             filenames.map((filename) => {
                 const ext = path.extname(filename).toLocaleLowerCase()
-                if (targetItems.indexOf(ext)) {
+                const n  =targetItems.indexOf(ext);
+                if (n >= 0) {
                     let item = new vscode.CompletionItem(filename);
                     item.kind = vscode.CompletionItemKind.File;
                     item.insertText = '"' + filename + '"';

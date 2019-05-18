@@ -33,15 +33,17 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('extension.expandMdcat', expandMdcatFile),
 		vscode.commands.registerCommand('extension.insertNewPage', insertNewPage),
-		vscode.languages.registerCompletionItemProvider("poyonshotmdcat", new MdcatCompletionProvider(), '$'),
-		vscode.languages.registerCompletionItemProvider("poyonshotmdcat", filePathCompletion, '='),
 		
 		vscode.window.onDidChangeActiveTextEditor((event) => {
 			if (!event || (event.document.languageId !== "poyonshotmdcat")) {
 				return;
 			}
 			(new DocumentDecoration()).update(event);
+			filePathCompletion.searchFiles()
 		}),
+		
+		vscode.languages.registerCompletionItemProvider("poyonshotmdcat", new MdcatCompletionProvider(), '$'),
+		vscode.languages.registerCompletionItemProvider("poyonshotmdcat", filePathCompletion, '='),
 	);
 }
 
