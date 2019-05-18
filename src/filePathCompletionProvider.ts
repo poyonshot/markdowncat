@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import * as path from "path";
 
 
 export default class FilePathCompletionProvider implements vscode.CompletionItemProvider {
@@ -16,8 +17,10 @@ export default class FilePathCompletionProvider implements vscode.CompletionItem
         // add folders
         let rootPathLen = vscode.workspace.rootPath!.length + 2;
 
+        let targetItems = ["md", "css"];
+
         // add markdown files
-        vscode.workspace.findFiles("**/*.md").then((urls) => {
+        vscode.workspace.findFiles("**/*.*").then((urls) => {
             return urls.map((url) => {
                 return url.path.substr(rootPathLen)!
 
@@ -25,10 +28,13 @@ export default class FilePathCompletionProvider implements vscode.CompletionItem
             })
         }).then((filenames) => {
             filenames.map((filename) => {
-                let item = new vscode.CompletionItem(filename);
-                item.kind = vscode.CompletionItemKind.File;
-                item.insertText = '"' + filename + '"';
-                this.items.push(item);
+                const ext = path.extname(filename).toLocaleLowerCase()
+                if (targetItems.indexOf(ext)) {
+                    let item = new vscode.CompletionItem(filename);
+                    item.kind = vscode.CompletionItemKind.File;
+                    item.insertText = '"' + filename + '"';
+                    this.items.push(item);
+                }
             })
         })
     }

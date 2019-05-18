@@ -13,7 +13,7 @@
 	"publisher": "poyonshot",
 	"icon": "images/icon-markdowncat-256.png",
 	"galleryBanner": {
-	  "color": "#C80000",
+	  "color": "#10F050",
 	  "theme": "light"
 	},
 	"activationEvents": [

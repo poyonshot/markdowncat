@@ -2,13 +2,13 @@
 
 Generate single markdown file by merging a set of markdown files.
 
-![MarkdownCat](images/icon-markdowncat-128.png)
+[Japanease README](README.ja.md)
 
-## Release Notes
+## Usage
 
-Users appreciate release notes as you update your extension.
+1. Create .mdcat file.
+1. Open .mdcat file.
+1. Write $include= 
+1. Select "Generate markdown file" in popup menu.
 
-### 0.0.1
-
-Initial release
 
