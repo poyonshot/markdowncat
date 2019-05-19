@@ -246,7 +246,8 @@ export default function expandMdcatFile() {
     let outFilename = getOutputFilePath(doc.fileName)
     vscode.window.showInformationMessage(outFilename);
 
-    writeFileSync(outFilename, "<!-- コメント -->\r\n")
+	
+    writeFileSync(outFilename, "")
     
 
     var it = new DocIterator(doc)
