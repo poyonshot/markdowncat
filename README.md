@@ -11,5 +11,5 @@ Generate single markdown file by merging a set of markdown files.
 1. Write $include= 
 1. Select "Generate markdown file" in popup menu.
 
-![usage](images\usage.gif)
+![usage](images/usage.gif)
 
