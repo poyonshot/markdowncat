@@ -9,4 +9,4 @@
 1. 結合したい Markdown ファイルを $include="ファイル名" の形式で記述します
 1. ポップアップメニューの「Markdown ファイルを作成」を選ぶとMarkdown ファイルを作成します。
 
-[使い方](images\usage.gif)
+![使い方](images\usage.gif)
