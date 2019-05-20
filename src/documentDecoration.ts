@@ -3,9 +3,9 @@ import * as vscode from "vscode";
 export default class DocumentDecoration
 {
     public static commentColor = "";
+    private static lineCommentDecorationType = vscode.window.createTextEditorDecorationType({});
 
     private timeout: NodeJS.Timer | undefined = undefined;
-    private lineCommentDecorationType = vscode.window.createTextEditorDecorationType({});
 
     public requestUpdate(editor: vscode.TextEditor | undefined, msec: number) {
 
@@ -22,8 +22,10 @@ export default class DocumentDecoration
             return;
         }
 
-        //this.lineCommentDecorationType.dispose();
-        this.lineCommentDecorationType = vscode.window.createTextEditorDecorationType({
+        if (DocumentDecoration.lineCommentDecorationType) {
+            DocumentDecoration.lineCommentDecorationType.dispose();
+        }
+        DocumentDecoration.lineCommentDecorationType = vscode.window.createTextEditorDecorationType({
             color: DocumentDecoration.commentColor
         });
 
@@ -38,7 +40,7 @@ export default class DocumentDecoration
             commentDecorationOptions.push(decoration);
         }
 
-        editor.setDecorations(this.lineCommentDecorationType, commentDecorationOptions);
+        editor.setDecorations(DocumentDecoration.lineCommentDecorationType, commentDecorationOptions);
         
         this.timeout = undefined;
     }

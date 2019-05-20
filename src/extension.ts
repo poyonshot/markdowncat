@@ -37,6 +37,8 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('extension.expandMdcat', expandMdcatFile),
 		vscode.commands.registerCommand('extension.insertNewPage', insertNewPage),
+		vscode.languages.registerCompletionItemProvider("poyonshotmdcat", new MdcatCompletionProvider(), '$'),
+		vscode.languages.registerCompletionItemProvider("poyonshotmdcat", filePathCompletion, '='),
 		
 		vscode.window.onDidChangeActiveTextEditor((event) => {
 			curEditor = event;
@@ -50,9 +52,6 @@ export function activate(context: vscode.ExtensionContext) {
 		workspace.onDidChangeTextDocument((event) => {
 			documentDecoration.requestUpdate(curEditor, 200);
 		}),
-		
-		vscode.languages.registerCompletionItemProvider("poyonshotmdcat", new MdcatCompletionProvider(), '$'),
-		vscode.languages.registerCompletionItemProvider("poyonshotmdcat", filePathCompletion, '='),
 	);
 }
 

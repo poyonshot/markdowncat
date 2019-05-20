@@ -13,3 +13,7 @@ Generate single markdown file by merging a set of markdown files.
 
 ![usage](images/usage.gif)
 
+
+## License
+
+The source code and strings are licensed under the [MIT](license.md) license.
