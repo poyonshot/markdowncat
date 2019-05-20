@@ -12,17 +12,25 @@ export default class FilePathCompletionProvider implements vscode.CompletionItem
 
     searchFiles() {
 
+        let editor = vscode.window.activeTextEditor;
+        if (!editor)
+        {
+            return
+        }
+        
         this.items = new Array<vscode.CompletionItem>();
-
-        // add folders
-        let rootPathLen = vscode.workspace.rootPath!.length + 2;
+    
+        let rootPath = path.dirname(editor.document.fileName) + "\\";
 
         let targetItems = [".md", ".css"];
 
         // add markdown files
         vscode.workspace.findFiles("**/*.*").then((urls) => {
             return urls.map((url) => {
-                return url.path.substr(rootPathLen)!
+                return (url.fsPath.substr(0, rootPath.length)! === rootPath) ? url.fsPath.substr(rootPath.length)! : "";
+            })
+            .filter((item) => {
+                return item.length > 0;
             })
         }).then((filenames) => {
             filenames.map((filename) => {
@@ -39,7 +47,10 @@ export default class FilePathCompletionProvider implements vscode.CompletionItem
     }
 
     provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList> {
-        return this.items;
+        let begin = new vscode.Position(position.line, 0);
+        let src = document.getText(new vscode.Range(begin, position))
+        let regEx = /.*\$include[^=]*=$/g;
+        return regEx.exec(src) ? this.items : [];
     }
 
     resolveCompletionItem (item: vscode.CompletionItem, token: vscode.CancellationToken): vscode.ProviderResult<vscode.CompletionItem> {

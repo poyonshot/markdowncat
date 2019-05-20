@@ -24,22 +24,31 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 	DocumentDecoration.commentColor = (typeof colorComment === "string") ? colorComment : "#30F030";
 
+	var  curEditor = vscode.window.activeTextEditor;
+
 	//ドキュメントオープン時にアクティベーションしているので、この時点でドキュメントを装飾する
-	(new DocumentDecoration()).update(vscode.window.activeTextEditor);
+	let documentDecoration = new DocumentDecoration();
+	documentDecoration.requestUpdate(curEditor, 0);
 
 	let filePathCompletion = new FilePathCompletionProvider()
 	filePathCompletion.searchFiles()
+
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('extension.expandMdcat', expandMdcatFile),
 		vscode.commands.registerCommand('extension.insertNewPage', insertNewPage),
 		
 		vscode.window.onDidChangeActiveTextEditor((event) => {
+			curEditor = event;
 			if (!event || (event.document.languageId !== "poyonshotmdcat")) {
 				return;
 			}
-			(new DocumentDecoration()).update(event);
+			documentDecoration.requestUpdate(curEditor, 0);
 			filePathCompletion.searchFiles()
+		}),
+
+		workspace.onDidChangeTextDocument((event) => {
+			documentDecoration.requestUpdate(curEditor, 200);
 		}),
 		
 		vscode.languages.registerCompletionItemProvider("poyonshotmdcat", new MdcatCompletionProvider(), '$'),
