@@ -35,7 +35,7 @@
 				},
 				"markdowncat.intellisense.includeExts": {
 					"type": ["string"],
-					"default": [".md", ".css"],
+					"default": ["md", "css"],
 					"description": "$include マクロのインテリセンスで対応する拡張子"
 				}
 			}
@@ -100,5 +100,5 @@
 		"type": "git",
 		"url": "https://github.com/poyonshot/markdowncat.git"
 	},
-	"homepage": "http://d.hatena.ne.jp/poyonshot/"
+	"homepage": "https://poyonshot.hatenablog.com/"
 }

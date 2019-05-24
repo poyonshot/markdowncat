@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import * as path from "path";
+import { extractExtentision } from "./mdcatUtility";
 
 
 export default class FilePathCompletionProvider implements vscode.CompletionItemProvider {
@@ -33,7 +34,7 @@ export default class FilePathCompletionProvider implements vscode.CompletionItem
             })
         }).then((filenames) => {
             filenames.map((filename) => {
-                const ext = path.extname(filename).toLocaleLowerCase();
+                const ext = extractExtentision(filename);
                 const n  = FilePathCompletionProvider.includeExts.indexOf(ext);
                 if (n >= 0) {
                     let item = new vscode.CompletionItem(filename);

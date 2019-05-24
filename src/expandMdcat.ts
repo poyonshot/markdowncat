@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { writeFile, appendFile, readFile, appendFileSync, readFileSync, writeFileSync, fstatSync } from 'fs';
+import { extractExtentision } from "./mdcatUtility";
 
 
 
@@ -82,10 +83,20 @@ class DocIterator
 	include(src: string)
 	{
 		let data = readFileSync(this.docDir + "\\" + src)
+		let ext = extractExtentision(src);
+		let bCSS = (ext === "css");
 
 		appendFileSync(this.outFilename, "<!-- " + src + " -->\r\n")
+
+		if (bCSS) {
+			appendFileSync(this.outFilename, "<style>\r\n")
+		}
 		
 		appendFileSync(this.outFilename, data)
+		
+		if (bCSS) {
+			appendFileSync(this.outFilename, "\r\n</style>")
+		}
 	}
 }
 
