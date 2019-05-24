@@ -2,7 +2,7 @@
 	"name": "markdowncat",
 	"displayName": "MarkdownCat",
 	"description": "Generate single markdown file by merging a set of markdown files.",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"engines": {
 		"vscode": "^1.33.0"
 	},
@@ -32,6 +32,11 @@
 					"type": "string",
 					"default": "auto",
 					"description": "comment color."
+				},
+				"markdowncat.intellisense.includeExts": {
+					"type": ["string"],
+					"default": [".md", ".css"],
+					"description": "$include マクロのインテリセンスで対応する拡張子"
 				}
 			}
 		},

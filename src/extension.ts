@@ -8,8 +8,7 @@ import FilePathCompletionProvider from "./filePathCompletionProvider"
 import { print } from 'util';
 
 
-export function activate(context: vscode.ExtensionContext) {
-	
+function initConfig() {
 	var colorComment = vscode.workspace.getConfiguration().get('markdowncat.color.comment');
 	if (typeof colorComment === "string") {
 		if (colorComment.toLowerCase() === "auto") {
@@ -23,6 +22,18 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	}
 	DocumentDecoration.commentColor = (typeof colorComment === "string") ? colorComment : "#30F030";
+
+	
+	var includeExts = vscode.workspace.getConfiguration().get('markdowncat.intellisense.includeExts');
+	if (includeExts instanceof Array) {
+		FilePathCompletionProvider.includeExts = includeExts;
+	}
+}
+
+
+export function activate(context: vscode.ExtensionContext) {
+	
+	initConfig()
 
 	var  curEditor = vscode.window.activeTextEditor;
 

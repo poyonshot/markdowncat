@@ -4,6 +4,7 @@ import * as path from "path";
 
 export default class FilePathCompletionProvider implements vscode.CompletionItemProvider {
     
+    public static includeExts: Array<String> = [];
     items: Array<vscode.CompletionItem>;
 
     constructor () {
@@ -22,8 +23,6 @@ export default class FilePathCompletionProvider implements vscode.CompletionItem
     
         let rootPath = path.dirname(editor.document.fileName) + "\\";
 
-        let targetItems = [".md", ".css"];
-
         // add markdown files
         vscode.workspace.findFiles("**/*.*").then((urls) => {
             return urls.map((url) => {
@@ -34,8 +33,8 @@ export default class FilePathCompletionProvider implements vscode.CompletionItem
             })
         }).then((filenames) => {
             filenames.map((filename) => {
-                const ext = path.extname(filename).toLocaleLowerCase()
-                const n  =targetItems.indexOf(ext);
+                const ext = path.extname(filename).toLocaleLowerCase();
+                const n  = FilePathCompletionProvider.includeExts.indexOf(ext);
                 if (n >= 0) {
                     let item = new vscode.CompletionItem(filename);
                     item.kind = vscode.CompletionItemKind.File;
