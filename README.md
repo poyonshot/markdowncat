@@ -6,6 +6,8 @@ Generate single markdown file by merging a set of markdown files.
 
 ## Usage
 
+### Include Markdown file
+
 1. Create .mdcat file.
 1. Open .mdcat file.
 1. Write $include= 
@@ -13,6 +15,9 @@ Generate single markdown file by merging a set of markdown files.
 
 ![usage](images/usage.gif)
 
+### Include CSS file
+
+![使い方](images/usage-css.gif)
 
 ## License
 
