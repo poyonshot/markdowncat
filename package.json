@@ -2,7 +2,7 @@
 	"name": "markdowncat",
 	"displayName": "MarkdownCat",
 	"description": "Generate single markdown file by merging a set of markdown files.",
-	"version": "0.0.7",
+	"version": "0.1.0",
 	"engines": {
 		"vscode": "^1.33.0"
 	},
