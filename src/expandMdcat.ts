@@ -82,7 +82,7 @@ class DocIterator
 
 	include(src: string)
 	{
-		let data = readFileSync(this.docDir + "\\" + src)
+		let data = readFileSync(this.docDir + path.sep + src)
 		let ext = extractExtentision(src);
 		let bCSS = (ext === "css");
 
@@ -235,7 +235,7 @@ function getOutputFilePath(mdcatPath: string)
 {
     var s = ""
     s += path.dirname(mdcatPath)
-    s += '\\'
+    s += path.sep
     s += path.basename(mdcatPath, path.extname(mdcatPath))
     s += '.md'
     return s

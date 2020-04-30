@@ -22,7 +22,7 @@ export default class FilePathCompletionProvider implements vscode.CompletionItem
         
         this.items = new Array<vscode.CompletionItem>();
     
-        let rootPath = path.dirname(editor.document.fileName) + "\\";
+        let rootPath = path.dirname(editor.document.fileName) + path.sep;
 
         // add markdown files
         vscode.workspace.findFiles("**/*.*").then((urls) => {
