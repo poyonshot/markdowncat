@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import * as assert from 'assert';
 import { DocIterator } from "../DocIterator";
+import { DocBufferBinary } from "../DocBuffer";
 import { TextDocumentMock } from "./TextDocumentMock";
 
 
@@ -40,5 +41,16 @@ suite("DocIterator Tests", function () {
         assert.equal("8", it.str(3, 1));
         assert.equal("89", it.str(3, 2));
         assert.equal("89", it.str(3, 3));
+    });
+
+
+    
+    test("str 2", function() {
+        let m = new DocBufferBinary(new Buffer("あいう\r\n\nえお"));
+        let s  = m.readLine();
+        let s1  = m.readLine();
+        let s2  = m.readLine();
+        let b = new Buffer(s.trimRight());
+        assert.equal("89", m.readLine);
     });
 });
