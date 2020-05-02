@@ -60,11 +60,6 @@ export class DocIterator
 		}
 	}
 
-	// eolToStr()
-	// {
-	// 	return (this.doc.eol == vscode.EndOfLine.CRLF) ? "\r\n" : "\n";
-	// }
-
 	top()
 	{
 		if (!this.charTop)
@@ -123,6 +118,16 @@ export class DocIterator
 		if (bCSS) {
 			appendFileSync(this.outFilename, "\r\n</style>")
 		}
+	}
+
+
+	clearMatchedString(): void
+	{
+	}
+
+	matchedString(): string
+	{
+		return "";
 	}
 }
 

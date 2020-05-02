@@ -4,6 +4,7 @@ import { writeFile, appendFile, readFile, appendFileSync, readFileSync, writeFil
 import { DocIterator } from "./DocIterator";
 import { DocBufferTextDocument } from "./DocBuffer";
 import { space_p, line_comment_p, block_comment_p } from "./parser/common_p";
+import { include_p } from "./parser/include_p";
 
 
 function plane_line_p(it: DocIterator): Boolean
@@ -19,70 +20,6 @@ function plane_line_p(it: DocIterator): Boolean
 }
 
 
-function include_p(it: DocIterator): Boolean
-{
-	if ((it.top() != "$")
-	|| (it.char(1) != "i")
-	|| (it.char(2) != "n")
-	|| (it.char(3) != "c")
-	|| (it.char(4) != "l")
-	|| (it.char(5) != "u")
-	|| (it.char(6) != "d")
-	|| (it.char(7) != "e")
-	){
-		return false;
-	}
-
-	var pos = 8;
-	var c = it.char(pos++);
-	while ((c == " ") || (c == "\t"))
-	{
-		c = it.char(pos++);	
-	}
-
-	if (c != "=")
-	{
-		// TODO エラー
-		return false;
-	}
-	
-	c = it.char(pos++);
-	while ((c == " ") || (c == "\t"))
-	{
-		c = it.char(pos++);	
-	}
-
-	if (c != "\"")
-	{
-		// TODO エラー
-		return false;
-	}
-	
-	let begin = pos;
-	c = it.char(pos++);
-	while (c != "\"")
-	{
-		c = it.char(pos++);	
-	}
-	let end = pos;
-
-	//両端の " は除く"
-	let filepath = it.lineStr.substr(begin, end - begin - 1)
-
-	c = it.char(pos++);
-	while ((c == " ") || (c == "\t"))
-	{
-		c = it.char(pos++);	
-	}
-	
-	it.charTop = null
-	it.column = pos - 1
-
-	it.flush();
-	it.include(filepath)
-
-	return true
-}
 
 function getOutputFilePath(mdcatPath: string)
 {
@@ -93,6 +30,9 @@ function getOutputFilePath(mdcatPath: string)
     s += '.md'
     return s
 }
+
+
+
 
 
 
@@ -112,15 +52,60 @@ export default function expandMdcatFile() {
 
 	
     writeFileSync(outFilename, "")
-    
+	
+
+	function outputMatchedString(it: DocIterator)
+	{
+		appendFileSync(outFilename, it.matchedString());
+		it.clearMatchedString();
+	}
+	
+
+	function includeProcess(filepath: string): void
+	{
+	
+		// css の場合
+		// md の場合
+		// その他
+		//outputMatchedString();
+		// let data = readFileSync(this.docDir + path.sep + src)
+		// let ext = extractExtentision(src);
+		// let bCSS = (ext === "css");
+
+		// appendFileSync(this.outFilename, "<!-- " + src + " -->\r\n")
+
+		// if (bCSS) {
+		// 	appendFileSync(this.outFilename, "<style>\r\n")
+		// }
+		
+		// appendFileSync(this.outFilename, data)
+		
+		// if (bCSS) {
+		// 	appendFileSync(this.outFilename, "\r\n</style>")
+		// }
+	}
+	
+
+
+
+
 
     var it = new DocIterator(new DocBufferTextDocument(doc))
     it.docDir =  path.dirname(outFilename);
-    it.outFilename = outFilename
+	it.outFilename = outFilename
+	it.eol = (doc.eol == vscode.EndOfLine.CRLF) ? "\r\n" : "\n";
 
     while (!it.isEnd())
     {
-        it.readLine();
+		it.clearMatchedString();
+		it.readLine();
+
+		// スペース
+		if (space_p(it))
+		{
+			outputMatchedString(it);
+			continue;
+		}
 
          // コメント
          if (line_comment_p(it) || block_comment_p(it))
@@ -129,13 +114,15 @@ export default function expandMdcatFile() {
          }
 
          // インクルードファイルを展開
-         if (include_p(it))
+         if (include_p(it, includeProcess))
          {
              continue;
          }
         
         // そのままコピー
-        plane_line_p(it)
+		plane_line_p(it)
+		// 
+		//	appendFileSync(outFilename, it.matchedString(true))
     }
 
     it.flush();
