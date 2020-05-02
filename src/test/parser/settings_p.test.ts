@@ -1,13 +1,13 @@
 import * as vscode from "vscode";
 import * as assert from 'assert';
 import { DocIterator } from "../../DocIterator";
-import { TextDocumentMock } from "../TextDocumentMock";
+import { DocBufferBinary } from "../../DocBuffer";
 import { settings_p } from "../../parser/settings_p";
 
     
 function createTestIterator(str: string): DocIterator
 {
-    let doc = new TextDocumentMock();
+    let doc = new DocBufferBinary(Buffer.from(""));
     let it = new DocIterator(doc);
     it.lineStr = str;
     return it;

@@ -2,13 +2,15 @@ import * as vscode from "vscode";
 import * as path from "path";
 import { writeFile, appendFile, readFile, appendFileSync, readFileSync, writeFileSync, fstatSync } from 'fs';
 import { extractExtentision } from "./mdcatUtility";
+import { DocBuffer } from "./DocBuffer";
 
 
 export class DocIterator
 {
-	doc: vscode.TextDocument;
+	buffer: DocBuffer;
 	row: number;
 	column: number;
+	eol: string;
 	lineStr: string;
 	outBuf: string;
 	charTop: string | null;
@@ -16,9 +18,10 @@ export class DocIterator
 	docDir: string;
 	outFilename: string;
 
-	constructor(doc: vscode.TextDocument)
+	constructor(buffer: DocBuffer)
 	{
-		this.doc = doc;
+		this.buffer = buffer;
+		this.eol = "\r\n";
 		this.row = 0;
 		this.column = 0;
 		this.lineStr = "";
@@ -30,7 +33,7 @@ export class DocIterator
 
 	clone()
 	{
-		let it = new DocIterator(this.doc);
+		let it = new DocIterator(this.buffer);
 		it.row = this.row;
 		it.column = this.column;
 		it.lineStr = this.lineStr;
@@ -43,24 +46,24 @@ export class DocIterator
 
 	isEnd()
 	{
-		return (this.lineStr == "") && (this.row >= this.doc.lineCount)
+		return (this.lineStr == "") && this.buffer.isEmpty
 	}
 
 	readLine()
 	{
 		if (this.lineStr == "")
 		{
-			this.lineStr = this.doc.lineAt(this.row).text;
+			this.lineStr = this.buffer.readLine();
 			this.row += 1;
 			this.column = 0;
 			this.charTop = null;
 		}
 	}
 
-	eolToStr()
-	{
-		return (this.doc.eol == vscode.EndOfLine.CRLF) ? "\r\n" : "\n";
-	}
+	// eolToStr()
+	// {
+	// 	return (this.doc.eol == vscode.EndOfLine.CRLF) ? "\r\n" : "\n";
+	// }
 
 	top()
 	{

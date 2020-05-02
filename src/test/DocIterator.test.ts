@@ -2,9 +2,6 @@ import * as vscode from "vscode";
 import * as assert from 'assert';
 import { DocIterator } from "../DocIterator";
 import { DocBufferBinary } from "../DocBuffer";
-import { TextDocumentMock } from "./TextDocumentMock";
-
-
 
 
 suite("DocIterator Tests", function () {
@@ -12,7 +9,7 @@ suite("DocIterator Tests", function () {
     // Defines a Mocha unit test
     test("str 1", function() {
 
-        let doc = new TextDocumentMock();
+        let doc = new DocBufferBinary(Buffer.from(""));
         let it = new DocIterator(doc);
 
         it.lineStr = "123456789";
@@ -45,12 +42,10 @@ suite("DocIterator Tests", function () {
 
 
     
-    test("str 2", function() {
-        let m = new DocBufferBinary(new Buffer("あいう\r\n\nえお"));
-        let s  = m.readLine();
-        let s1  = m.readLine();
-        let s2  = m.readLine();
-        let b = new Buffer(s.trimRight());
-        assert.equal("89", m.readLine);
+    test("readLine 2", function() {
+        let m = new DocBufferBinary(Buffer.from("あいう\r\n\nえお"));
+        assert.equal("あいう", m.readLine());
+        assert.equal("", m.readLine());
+        assert.equal("えお", m.readLine());
     });
 });

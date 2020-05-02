@@ -22,7 +22,7 @@ export class DocBufferBinary implements DocBuffer
 
 	constructor(data: Buffer | null = null)
 	{
-        this.data = data || new Buffer("");
+        this.data = data || Buffer.alloc(0);
         this.pos = 0;
     }
     

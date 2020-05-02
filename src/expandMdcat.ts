@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import * as path from "path";
 import { writeFile, appendFile, readFile, appendFileSync, readFileSync, writeFileSync, fstatSync } from 'fs';
 import { DocIterator } from "./DocIterator";
+import { DocBufferTextDocument } from "./DocBuffer";
 import { space_p, line_comment_p, block_comment_p } from "./parser/common_p";
 
 
@@ -10,7 +11,7 @@ function plane_line_p(it: DocIterator): Boolean
 	let c = it.next() 
 	if (c == "")
 	{
-		c = it.eolToStr()
+		c = it.eol
 		it.lineStr = "";
 	}
 	it.outBuf += c;
@@ -113,7 +114,7 @@ export default function expandMdcatFile() {
     writeFileSync(outFilename, "")
     
 
-    var it = new DocIterator(doc)
+    var it = new DocIterator(new DocBufferTextDocument(doc))
     it.docDir =  path.dirname(outFilename);
     it.outFilename = outFilename
 
