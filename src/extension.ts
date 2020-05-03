@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { workspace } from "vscode";
 import DocumentDecoration from "./documentDecoration";
-import expandMdcatFile from "./ExpandMdcatFile"
+import expandMdcatFile from "./expandMdcatFile"
 import insertNewPage from "./insertNewPage"
 import MdcatCompletionProvider from "./mdcatCompletionProvider"
 import FilePathCompletionProvider from "./filePathCompletionProvider"

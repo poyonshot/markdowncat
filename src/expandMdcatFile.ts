@@ -1,12 +1,13 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { writeFile, appendFile, readFile, appendFileSync, readFileSync, writeFileSync, fstatSync } from 'fs';
-import { DocIterator } from "./DocIterator";
-import { DocBufferTextDocument } from "./DocBuffer";
-import { space_p, line_comment_p, block_comment_p } from "./parser/common_p";
-import { include_p } from "./parser/include_p";
+// import { writeFile, appendFile, readFile, appendFileSync, readFileSync, writeFileSync, fstatSync } from 'fs';
+import { ExpandMdcat } from "./ExpandMdcat";
+// import { DocIterator } from "./DocIterator";
+// import { DocBufferTextDocument } from "./DocBuffer";
+// import { space_p, line_comment_p, block_comment_p } from "./parser/common_p";
+// import { include_p } from "./parser/include_p";
 
-
+/*
 function plane_line_p(it: DocIterator): Boolean
 {
 	let c = it.next() 
@@ -18,7 +19,7 @@ function plane_line_p(it: DocIterator): Boolean
 	it.outBuf += c;
 	return true
 }
-
+*/
 
 
 function getOutputFilePath(mdcatPath: string)
@@ -45,13 +46,17 @@ export default function expandMdcatFile() {
         return
     }
 
-    let doc = editor!.document;            // ドキュメント取得
-
-    let outFilename = getOutputFilePath(doc.fileName)
-    vscode.window.showInformationMessage(outFilename);
-
+	let doc = editor!.document;            // ドキュメント取得
 	
-    writeFileSync(outFilename, "")
+	let mdcat = new ExpandMdcat(doc);
+
+    vscode.window.showInformationMessage(mdcat.outputFilePath);
+
+	mdcat.run();
+	
+
+	/*
+    let outFilename = mdcat.outputFilePath
 	
 
 	function outputMatchedString(it: DocIterator)
@@ -126,5 +131,5 @@ export default function expandMdcatFile() {
     }
 
     it.flush();
-
+*/
 }

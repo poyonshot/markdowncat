@@ -3,6 +3,7 @@ import * as path from "path";
 import { writeFile, appendFile, readFile, appendFileSync, readFileSync, writeFileSync, fstatSync } from 'fs';
 import { extractExtentision } from "./mdcatUtility";
 import { DocBuffer } from "./DocBuffer";
+import { print } from "util";
 
 
 export class DocIterator
@@ -76,7 +77,7 @@ export class DocIterator
 		}
 		if (n >= 1) {
 			this.column += n
-			this.charTop = this.lineStr.charAt(this.column - 1);
+			this.charTop = this.lineStr.charAt(this.column);
 		}
 		return this.charTop;
 	}
@@ -121,13 +122,18 @@ export class DocIterator
 	}
 
 
-	clearMatchedString(): void
-	{
-	}
-
 	matchedString(): string
 	{
-		return "";
+		return (this.column >  0) ? this.lineStr.substr(0, this.column) : "";
+	}
+
+	discardMatched(): void
+	{
+		if (this.column > 0)
+		{
+			this.lineStr = this.lineStr.substr(this.column);
+			this.column = 0;
+		}
 	}
 }
 

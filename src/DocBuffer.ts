@@ -78,7 +78,7 @@ export class DocBufferTextDocument implements DocBuffer
 			let str = this.doc.lineAt(this.row).text;
 			this.row += 1;
 			this.column = 0;
-			return str.trimRight();
+			return str;
 		}
     }
 }
