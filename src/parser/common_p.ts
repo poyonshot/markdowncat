@@ -41,6 +41,16 @@ export function eol_p(it: DocIterator): Boolean
 	return true;
 }
 
+export function str_p(it: DocIterator, str: string): Boolean
+{
+	if (it.str(0, str.length) != str)
+	{
+		return false;
+	}
+	it.advance(str.length);
+	return true;
+}
+
 
 export function line_comment_p(it: DocIterator): Boolean
 {

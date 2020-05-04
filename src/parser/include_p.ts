@@ -5,6 +5,7 @@ import { space_p } from "./common_p";
 
 export function include_p(it: DocIterator, onMatch: (filepath: string) => void): Boolean
 {
+	var p = it;
 	if (it.str(0,8) != "$include")
 	{
 		return false;
