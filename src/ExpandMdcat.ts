@@ -5,17 +5,22 @@ import { DocIterator } from "./DocIterator";
 import { DocBufferTextDocument } from "./DocBuffer";
 import { space_p, line_comment_p, block_comment_p, line_any_p } from "./parser/common_p";
 import { include_p } from "./parser/include_p";
+import { extractExtentision } from "./mdcatUtility";
 
 
 export class ExpandMdcat
 {
     doc: vscode.TextDocument
+    docDir: string
     outputFilePath: string
+    eol : string
 
     constructor(doc: vscode.TextDocument)
     {
         this.doc = doc;
         this.outputFilePath = this.getOutputFilePath(doc.fileName);
+        this.docDir = path.dirname(this.outputFilePath);
+        this.eol = (this.doc.eol == vscode.EndOfLine.CRLF) ? "\r\n" : "\n";
     }
 
     getOutputFilePath(mdcatPath: string)
@@ -60,7 +65,7 @@ export class ExpandMdcat
             }
 
             // インクルードファイルを展開
-            if (include_p(it, this.onInclude))
+            if (include_p(it, filepath => this.onInclude(filepath)))
             {
                 this.onDiscardMatched(it)
                 continue;
@@ -93,9 +98,20 @@ export class ExpandMdcat
 
     onInclude(filepath: string): void
     {
-        appendFileSync(this.outputFilePath, "***************\n");
-        appendFileSync(this.outputFilePath, filepath);
-        appendFileSync(this.outputFilePath, "\n");
-        appendFileSync(this.outputFilePath, "***************\n");
+        let data = readFileSync(this.docDir + path.sep + filepath)
+		let ext = extractExtentision(filepath);
+		let bCSS = (ext === "css");
+
+		appendFileSync(this.outputFilePath, "<!-- " + filepath + " -->" + this.eol)
+
+		if (bCSS) {
+			appendFileSync(this.outputFilePath, "<style>" + this.eol)
+		}
+		
+		appendFileSync(this.outputFilePath, data)
+		
+		if (bCSS) {
+			appendFileSync(this.outputFilePath, "</style>" + this.eol)
+        }
     }
 }
