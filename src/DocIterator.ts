@@ -59,16 +59,10 @@ export class DocIterator
 		return this.charTop;
 	}
 
-	next(n: number | null = null)
+	advance(n: number = 1)
 	{
-		if (n == null) {
-			n = 1
-		}
-		if (n >= 1) {
-			this.pos += n
-			this.charTop = this.lineStr.charAt(this.pos);
-		}
-		return this.charTop;
+		this.pos += n
+		this.charTop = this.lineStr.charAt(this.pos);
 	}
 
 	char(offset: number)

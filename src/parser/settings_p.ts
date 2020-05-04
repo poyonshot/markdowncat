@@ -9,7 +9,7 @@ export function settings_p(it: DocIterator): Boolean
     {
 		return false;
     }
-    it.next(len)
+    it.advance(len)
 
     var p = it.clone();
 
@@ -19,7 +19,7 @@ export function settings_p(it: DocIterator): Boolean
 	{
 		return false;
 	}
-    it.next()
+    it.advance()
 	
     space_p(p);
 

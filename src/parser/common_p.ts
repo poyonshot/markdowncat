@@ -16,7 +16,7 @@ export function space_p(it: DocIterator): Boolean
 		return false;
 	}
 
-	it.next(pos);
+	it.advance(pos);
 	return true;
 }
 
@@ -88,7 +88,7 @@ export function object_p(it: DocIterator): Boolean
 	{
 		return false;
 	}
-	it.next();
+	it.advance();
 
     var p = it.clone();
 
