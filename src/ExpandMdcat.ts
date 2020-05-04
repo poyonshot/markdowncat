@@ -93,6 +93,9 @@ export class ExpandMdcat
 
     onInclude(filepath: string): void
     {
-
+        appendFileSync(this.outputFilePath, "***************\n");
+        appendFileSync(this.outputFilePath, filepath);
+        appendFileSync(this.outputFilePath, "\n");
+        appendFileSync(this.outputFilePath, "***************\n");
     }
 }

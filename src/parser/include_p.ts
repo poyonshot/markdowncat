@@ -5,15 +5,8 @@ import { space_p } from "./common_p";
 
 export function include_p(it: DocIterator, onMatch: (filepath: string) => void): Boolean
 {
-	if ((it.top() != "$")
-	|| (it.char(1) != "i")
-	|| (it.char(2) != "n")
-	|| (it.char(3) != "c")
-	|| (it.char(4) != "l")
-	|| (it.char(5) != "u")
-	|| (it.char(6) != "d")
-	|| (it.char(7) != "e")
-	){
+	if (it.str(0,8) != "$include")
+	{
 		return false;
 	}
 
