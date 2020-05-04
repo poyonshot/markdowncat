@@ -20,19 +20,16 @@ suite("space_p Tests", function () {
     // Defines a Mocha unit test
     test("1", function() {
 
-        let doc = new DocBufferBinary(Buffer.from(""));
-        let it = new DocIterator(doc);
+        let it = testIterator(" $settings= { }");
+        it.readLine();
 
-        it.lineStr = " $settings= { }";
         assert.equal(true, space_p(it));
     });
 
     test("2", function() {
 
-        let doc = new DocBufferBinary();
-        let it = new DocIterator(doc);
+        let it = testIterator("   ");
 
-        it.lineStr = "   ";
         assert.equal(true, space_p(it));
         assert.equal(3, it.pos);
         assert.equal("   ", it.getMatched());
@@ -43,10 +40,7 @@ suite("space_p Tests", function () {
 suite("line_comment_p Tests", function () {
 
     test("1", function() {
-        let doc = new DocBufferBinary();
-        let it = new DocIterator(doc);
-
-        it.lineStr = "// abc ";
+        let it = testIterator("// abc ");
         assert.equal(true, line_comment_p(it));
         assert.equal(7, it.pos);
         assert.equal("// abc ", it.getMatched());

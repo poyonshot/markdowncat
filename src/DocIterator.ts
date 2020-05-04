@@ -9,14 +9,13 @@ export class DocIterator
 {
 	buffer: DocBuffer;
 	pos: number;
-	lineStr: string;
 	charTop: string | null;
+	get lineStr(): string { return this.buffer.lineStr; }
 
 	constructor(buffer: DocBuffer)
 	{
 		this.buffer = buffer;
 		this.pos = 0;
-		this.lineStr = "";
 		this.charTop = null;
 	}
 
@@ -24,7 +23,6 @@ export class DocIterator
 	{
 		let it = new DocIterator(this.buffer);
 		it.pos = this.pos;
-		it.lineStr = this.lineStr;
 		it.charTop = this.charTop;
 		return it;
 	}
@@ -41,7 +39,7 @@ export class DocIterator
 
 	readLine()
 	{
-		this.lineStr += this.buffer.readLine();
+		this.buffer.readLine();
 		this.charTop = this.lineStr.charAt(this.pos);
 	}
 
@@ -78,11 +76,8 @@ export class DocIterator
 
 	discardMatched(): void
 	{
-		if (this.pos > 0)
-		{
-			this.lineStr = this.lineStr.substr(this.pos);
-			this.pos = 0;
-		}
+		this.buffer.discard(this.pos);
+		this.pos = 0;
 	}
 }
 

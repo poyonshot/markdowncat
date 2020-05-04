@@ -119,7 +119,6 @@ export function object_p(it: DocIterator): Boolean
 	{
 		if (!c)
 		{
-			it.lineStr = ""
 			it.readLine();
 			if (it.isEnd())
 			{

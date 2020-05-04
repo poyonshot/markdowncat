@@ -7,9 +7,9 @@ import { settings_p } from "../../parser/settings_p";
     
 function createTestIterator(str: string): DocIterator
 {
-    let doc = new DocBufferBinary(Buffer.from(""));
+    let doc = new DocBufferBinary(Buffer.from(str));
     let it = new DocIterator(doc);
-    it.lineStr = str;
+    it.readLine();
     return it;
 }
 
