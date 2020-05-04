@@ -9,22 +9,15 @@ export class DocIterator
 {
 	buffer: DocBuffer;
 	pos: number;
-	eol: string;
 	lineStr: string;
 	charTop: string | null;
-
-	docDir: string;
-	outFilename: string;
 
 	constructor(buffer: DocBuffer)
 	{
 		this.buffer = buffer;
-		this.eol = "\r\n";
 		this.pos = 0;
 		this.lineStr = "";
 		this.charTop = null;
-		this.docDir = "";
-		this.outFilename = "";
 	}
 
 	clone()
@@ -33,8 +26,6 @@ export class DocIterator
 		it.pos = this.pos;
 		it.lineStr = this.lineStr;
 		it.charTop = this.charTop;
-		it.docDir = this.docDir;
-		it.outFilename = this.outFilename;
 		return it;
 	}
 
@@ -90,27 +81,6 @@ export class DocIterator
 		let begin = this.pos + offset;
 		return this.lineStr.slice(begin, begin + len);
 	}
-
-
-	include(src: string)
-	{
-		let data = readFileSync(this.docDir + path.sep + src)
-		let ext = extractExtentision(src);
-		let bCSS = (ext === "css");
-
-		appendFileSync(this.outFilename, "<!-- " + src + " -->\r\n")
-
-		if (bCSS) {
-			appendFileSync(this.outFilename, "<style>\r\n")
-		}
-		
-		appendFileSync(this.outFilename, data)
-		
-		if (bCSS) {
-			appendFileSync(this.outFilename, "\r\n</style>")
-		}
-	}
-
 
 	getMatched(): string
 	{

@@ -37,11 +37,7 @@ export class ExpandMdcat
     {
         writeFileSync(this.outputFilePath, "")
         
-
         var it = new DocIterator(new DocBufferTextDocument(this.doc))
-        it.docDir =  path.dirname(this.outputFilePath);
-        it.outFilename = this.outputFilePath
-        it.eol = (this.doc.eol == vscode.EndOfLine.CRLF) ? "\r\n" : "\n";
 
         while (!it.isEnd())
         {
