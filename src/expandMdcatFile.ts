@@ -43,7 +43,7 @@ export default function expandMdcatFile() {
     let editor = vscode.window.activeTextEditor; // エディタ取得
     if (!editor)
     {
-        return
+        return;
     }
 
 	let doc = editor!.document;            // ドキュメント取得

@@ -16,8 +16,8 @@ export function space_p(it: DocIterator): Boolean
 		return false;
 	}
 
-	it.next(pos)
-	return true
+	it.next(pos);
+	return true;
 }
 
 
@@ -31,7 +31,7 @@ export function line_comment_p(it: DocIterator): Boolean
 	let pos = it.lineStr.indexOf("\n", it.column + 2);
 	it.column = (pos >= 0) ? pos : it.lineStr.length;
 
-	return true
+	return true;
 }
 
 
@@ -53,7 +53,7 @@ export function block_comment_p(it: DocIterator): Boolean
 			if (it.isEnd())
 			{
 				//TODO:エラー
-				return true;
+				return false;
 			}
 
 			pos = 0;
