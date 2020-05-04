@@ -1,64 +1,55 @@
 import * as vscode from "vscode";
 import { DocIterator } from "../DocIterator";
-import { space_p } from "./common_p";
+import { space_p, str_p } from "./common_p";
 
 
 export function include_p(it: DocIterator, onMatch: (filepath: string) => void): Boolean
 {
-	var p = it;
-	if (it.str(0,8) != "$include")
+	var p = it.clone();
+
+	if (!str_p(p, "$include"))
 	{
 		return false;
 	}
 
-	var pos = 8;
-	var c = it.char(pos++);
-	while ((c == " ") || (c == "\t"))
-	{
-		c = it.char(pos++);	
-	}
+	space_p(p);
 
-	if (c != "=")
+	if (!str_p(p, "="))
 	{
 		// TODO エラー
 		return false;
 	}
 	
-	c = it.char(pos++);
-	while ((c == " ") || (c == "\t"))
-	{
-		c = it.char(pos++);	
-	}
+	space_p(p);
 
-	if (c != "\"")
+	if (!str_p(p, "\""))
 	{
 		// TODO エラー
 		return false;
 	}
 	
-	let begin = pos;
-	c = it.char(pos++);
+	var cur = 0
+	var c = p.char(cur++);
 	while (c != "\"")
 	{
-		c = it.char(pos++);	
+		if ((c == "\n") || (c == ""))
+		{
+			// " の前に改行や終端に達した
+			return false;
+		}
+		c = p.char(cur++);	
 	}
-	let end = pos;
 
 	//両端の " は除く"
-	let filepath = it.lineStr.substr(begin, end - begin - 1)
+	let filepath = p.lineStr.substr(p.pos, cur - 1)
+	p.advance(cur);
 
-	c = it.char(pos++);
-	while ((c == " ") || (c == "\t"))
-	{
-		c = it.char(pos++);	
-	}
+	space_p(p);
 	
-	it.charTop = null
-	it.pos = pos - 1
-
     onMatch(filepath);
-//	it.flush();
-//	it.include(filepath)
+
+	it.pos = p.pos;
+	it.charTop = null;
 
 	return true
 }

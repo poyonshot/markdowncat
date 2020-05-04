@@ -107,7 +107,7 @@ export function block_comment_p(it: DocIterator): Boolean
 export function line_any_p(it: DocIterator): Boolean
 {
 	let pos = it.lineStr.indexOf("\n", it.pos);
-	it.pos = (pos >= 0) ? pos : it.lineStr.length;
+	it.pos = (pos >= 0) ? (pos + 1) : it.lineStr.length;
 	return true
 }
 
