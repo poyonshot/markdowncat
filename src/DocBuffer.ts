@@ -78,6 +78,10 @@ export class DocBufferTextDocument implements DocBuffer
 			let str = this.doc.lineAt(this.row).text;
 			this.row += 1;
 			this.column = 0;
+			if (!this.isEmpty)
+			{
+				str += "\n";
+			}
 			return str;
 		}
     }

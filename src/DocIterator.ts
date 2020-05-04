@@ -41,11 +41,6 @@ export class DocIterator
 
 	readLine()
 	{
-		if (this.lineStr != "")
-		{
-			this.lineStr += "\n";
-		}
-
 		this.lineStr += this.buffer.readLine();
 		this.charTop = this.lineStr.charAt(this.pos);
 	}

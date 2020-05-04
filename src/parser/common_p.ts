@@ -21,6 +21,27 @@ export function space_p(it: DocIterator): Boolean
 }
 
 
+export function eol_p(it: DocIterator): Boolean
+{
+	var pos = 0;
+	var c = it.top();
+	if (c == "\r")
+	{
+		++pos;
+		c = it.char(pos);	
+	}
+
+	if (c != "\n")
+	{
+		return false;
+	}
+
+	++pos;
+	it.advance(pos);
+	return true;
+}
+
+
 export function line_comment_p(it: DocIterator): Boolean
 {
 	if ((it.top() != "/") || (it.char(1) != "/"))

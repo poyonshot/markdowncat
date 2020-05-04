@@ -3,7 +3,7 @@ import * as path from "path";
 import { writeFile, appendFile, readFile, appendFileSync, readFileSync, writeFileSync, fstatSync } from 'fs';
 import { DocIterator } from "./DocIterator";
 import { DocBufferTextDocument } from "./DocBuffer";
-import { space_p, line_comment_p, block_comment_p, line_any_p } from "./parser/common_p";
+import { space_p, eol_p, line_comment_p, block_comment_p, line_any_p } from "./parser/common_p";
 import { include_p } from "./parser/include_p";
 import { extractExtentision } from "./mdcatUtility";
 
@@ -41,15 +41,15 @@ export class ExpandMdcat
 
         while (!it.isEnd())
         {
+            // スペース, 改行
+            while (space_p(it) || eol_p(it))
+            {
+                this.onOutputMatched(it);
+            }
+
             if (it.isEOL)
             {
                 it.readLine();
-            }
-
-            // スペース
-            if (space_p(it))
-            {
-                this.onOutputMatched(it);
                 continue;
             }
 
