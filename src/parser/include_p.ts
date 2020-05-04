@@ -60,11 +60,11 @@ export function include_p(it: DocIterator, onMatch: (filepath: string) => void):
 	}
 	
 	it.charTop = null
-	it.column = pos - 1
+	it.pos = pos - 1
 
     onMatch(filepath);
-	it.flush();
-	it.include(filepath)
+//	it.flush();
+//	it.include(filepath)
 
 	return true
 }

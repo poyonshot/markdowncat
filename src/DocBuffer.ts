@@ -43,8 +43,8 @@ export class DocBufferBinary implements DocBuffer
         else
         {
             this.pos = end + 1;
-        }
-        return this.data.toString("utf-8", begin, end).trimRight();
+		}
+        return this.data.toString("utf-8", begin, end);
     }
 }
 

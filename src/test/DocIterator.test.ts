@@ -23,13 +23,13 @@ suite("DocIterator Tests", function () {
         assert.equal("23", it.str(1, 2));
         assert.equal("234", it.str(1, 3));
         
-        it.column = 1;
+        it.pos = 1;
         assert.equal("", it.str(0, 0));
         assert.equal("2", it.str(0, 1));
         assert.equal("23", it.str(0, 2));
         assert.equal("234", it.str(0, 3));
 
-        it.column = 4;
+        it.pos = 4;
         assert.equal("", it.str(1, 0));
         assert.equal("6", it.str(1, 1));
         assert.equal("67", it.str(1, 2));

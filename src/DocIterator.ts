@@ -3,17 +3,14 @@ import * as path from "path";
 import { writeFile, appendFile, readFile, appendFileSync, readFileSync, writeFileSync, fstatSync } from 'fs';
 import { extractExtentision } from "./mdcatUtility";
 import { DocBuffer } from "./DocBuffer";
-import { print } from "util";
 
 
 export class DocIterator
 {
 	buffer: DocBuffer;
-	row: number;
-	column: number;
+	pos: number;
 	eol: string;
 	lineStr: string;
-	outBuf: string;
 	charTop: string | null;
 
 	docDir: string;
@@ -23,10 +20,8 @@ export class DocIterator
 	{
 		this.buffer = buffer;
 		this.eol = "\r\n";
-		this.row = 0;
-		this.column = 0;
+		this.pos = 0;
 		this.lineStr = "";
-		this.outBuf = "";
 		this.charTop = null;
 		this.docDir = "";
 		this.outFilename = "";
@@ -35,37 +30,40 @@ export class DocIterator
 	clone()
 	{
 		let it = new DocIterator(this.buffer);
-		it.row = this.row;
-		it.column = this.column;
+		it.pos = this.pos;
 		it.lineStr = this.lineStr;
-		it.outBuf = this.outBuf;
 		it.charTop = this.charTop;
 		it.docDir = this.docDir;
 		it.outFilename = this.outFilename;
 		return it;
 	}
 
+	get isEOL(): boolean
+	{
+		return this.pos >= this.lineStr.length;
+	}
+
 	isEnd()
 	{
-		return (this.lineStr == "") && this.buffer.isEmpty
+		return this.isEOL && this.buffer.isEmpty;
 	}
 
 	readLine()
 	{
-		if (this.lineStr == "")
+		if (this.lineStr != "")
 		{
-			this.lineStr = this.buffer.readLine();
-			this.row += 1;
-			this.column = 0;
-			this.charTop = null;
+			this.lineStr += "\n";
 		}
+
+		this.lineStr += this.buffer.readLine();
+		this.charTop = this.lineStr.charAt(this.pos);
 	}
 
 	top()
 	{
 		if (!this.charTop)
 		{
-			this.charTop = this.lineStr.charAt(this.column);
+			this.charTop = this.lineStr.charAt(this.pos);
 		}
 		return this.charTop;
 	}
@@ -76,31 +74,23 @@ export class DocIterator
 			n = 1
 		}
 		if (n >= 1) {
-			this.column += n
-			this.charTop = this.lineStr.charAt(this.column);
+			this.pos += n
+			this.charTop = this.lineStr.charAt(this.pos);
 		}
 		return this.charTop;
 	}
 
 	char(offset: number)
 	{
-		return this.lineStr.charAt(this.column + offset);
+		return this.lineStr.charAt(this.pos + offset);
 	}
 
 	str(offset: number, len: number)
 	{
-		let begin = this.column + offset;
+		let begin = this.pos + offset;
 		return this.lineStr.slice(begin, begin + len);
 	}
 
-	flush()
-	{
-		if (this.outBuf != "")
-		{
-			appendFileSync(this.outFilename, this.outBuf)
-			this.outBuf = "";	
-		}
-	}
 
 	include(src: string)
 	{
@@ -122,17 +112,17 @@ export class DocIterator
 	}
 
 
-	matchedString(): string
+	getMatched(): string
 	{
-		return (this.column >  0) ? this.lineStr.substr(0, this.column) : "";
+		return (this.pos >  0) ? this.lineStr.substr(0, this.pos) : "";
 	}
 
 	discardMatched(): void
 	{
-		if (this.column > 0)
+		if (this.pos > 0)
 		{
-			this.lineStr = this.lineStr.substr(this.column);
-			this.column = 0;
+			this.lineStr = this.lineStr.substr(this.pos);
+			this.pos = 0;
 		}
 	}
 }

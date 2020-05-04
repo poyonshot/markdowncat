@@ -40,7 +40,10 @@ export class ExpandMdcat
 
         while (!it.isEnd())
         {
-            it.readLine();
+            if (it.isEOL)
+            {
+                it.readLine();
+            }
 
             // スペース
             if (space_p(it))
@@ -70,15 +73,12 @@ export class ExpandMdcat
                 continue;
             }
         }
-
-        it.flush();
-        this.onOutputMatched(it)
     }
 
 
     onOutputMatched(it: DocIterator): void
     {
-        let str = it.matchedString();
+        let str = it.getMatched();
         if (str.length > 0)
         {
             appendFileSync(this.outputFilePath, str)

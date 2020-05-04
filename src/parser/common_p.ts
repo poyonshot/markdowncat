@@ -28,8 +28,8 @@ export function line_comment_p(it: DocIterator): Boolean
 		return false;
 	}
 
-	let pos = it.lineStr.indexOf("\n", it.column + 2);
-	it.column = (pos >= 0) ? pos : it.lineStr.length;
+	let pos = it.lineStr.indexOf("\n", it.pos + 2);
+	it.pos = (pos >= 0) ? pos : it.lineStr.length;
 
 	return true;
 }
@@ -48,15 +48,14 @@ export function block_comment_p(it: DocIterator): Boolean
 	{
 		if (!c)
 		{
-			it.lineStr = ""
 			it.readLine();
 			if (it.isEnd())
 			{
 				//TODO:エラー
 				return false;
 			}
-
-			pos = 0;
+			//改行文字分
+			pos += 1;
 		}
 
 		c = it.char(pos++);
@@ -66,7 +65,7 @@ export function block_comment_p(it: DocIterator): Boolean
 
 		c = it.char(pos++);
 		if (c == "/") {
-			it.column = pos
+			it.pos = pos
 			return true
 		}
 
@@ -76,8 +75,8 @@ export function block_comment_p(it: DocIterator): Boolean
 
 export function line_any_p(it: DocIterator): Boolean
 {
-	let pos = it.lineStr.indexOf("\n", it.column);
-	it.column = (pos >= 0) ? pos : it.lineStr.length;
+	let pos = it.lineStr.indexOf("\n", it.pos);
+	it.pos = (pos >= 0) ? pos : it.lineStr.length;
 	return true
 }
 
@@ -117,7 +116,7 @@ export function object_p(it: DocIterator): Boolean
 
 		c = it.char(pos++);
 		if (c == "}") {
-			it.column = pos
+			it.pos = pos
 			return true
 		}
 
