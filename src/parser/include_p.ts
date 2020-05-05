@@ -46,10 +46,8 @@ export function include_p(it: DocIterator, onMatch: (filepath: string) => void):
 
 	space_p(p);
 	
+    it.advance(p.pos - it.pos);
     onMatch(filepath);
-
-	it.pos = p.pos;
-	it.charTop = null;
 
 	return true
 }
