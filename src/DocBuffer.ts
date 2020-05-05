@@ -57,7 +57,7 @@ export class DocBufferBinary implements DocBuffer
 	
 	discard(n: number): void
 	{
-		if (n > this.lineStr.length)
+		if (n > 0)
 		{
 			this.lineStr = this.lineStr.substr(n);
 		}

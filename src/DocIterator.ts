@@ -78,6 +78,7 @@ export class DocIterator
 	{
 		this.buffer.discard(this.pos);
 		this.pos = 0;
+		this.charTop = null;
 	}
 }
 
