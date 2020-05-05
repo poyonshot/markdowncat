@@ -19,18 +19,18 @@ suite("settings_2p Tests", function () {
     test("1", function() {
 
         var it = createTestIterator(" $settings= { }");
-        assert.equal(false, settings_p(it));
+        assert.equal(false, settings_p(it, json => null));
         
         it = createTestIterator("$settings");
-        assert.equal(false, settings_p(it));
+        assert.equal(false, settings_p(it, json => null));
     });
 
     test("2", function() {
 
         var it = createTestIterator("$settings= { }");
-        assert.equal(true, settings_p(it));
+        assert.equal(true, settings_p(it, json => null));
         
         it = createTestIterator("$settings  \t  = { }");
-        assert.equal(true, settings_p(it));
+        assert.equal(true, settings_p(it, json => null));
     });
 });

@@ -32,6 +32,11 @@ export class DocIterator
 		return this.pos >= this.lineStr.length;
 	}
 
+	get needRead(): boolean
+	{
+		return this.pos >= this.lineStr.length;
+	}
+
 	isEnd()
 	{
 		return this.isEOL && this.buffer.isEmpty;
@@ -44,7 +49,12 @@ export class DocIterator
 	}
 
 	top()
-	{
+	{		
+		if (this.needRead)
+		{
+			this.readLine();
+		}
+
 		if (!this.charTop)
 		{
 			this.charTop = this.lineStr.charAt(this.pos);
@@ -60,11 +70,19 @@ export class DocIterator
 
 	char(offset: number)
 	{
+		if (this.needRead)
+		{
+			this.readLine();
+		}
 		return this.lineStr.charAt(this.pos + offset);
 	}
 
 	str(offset: number, len: number)
 	{
+		if (this.needRead)
+		{
+			this.readLine();
+		}
 		let begin = this.pos + offset;
 		return this.lineStr.slice(begin, begin + len);
 	}

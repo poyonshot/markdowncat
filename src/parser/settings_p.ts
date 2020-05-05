@@ -1,56 +1,55 @@
 import * as vscode from "vscode";
 import { DocIterator } from "../DocIterator";
-import { space_p } from "./common_p";
+import { space_p, str_p } from "./common_p";
 
-export function settings_p(it: DocIterator): Boolean
+export function settings_p(it: DocIterator, onMatch: (json: string) => void): Boolean
 {
-    let len = 9
-    if ((it.top() != "$") || (it.str(0, len) != "$settings"))
-    {
-		return false;
-    }
-    it.advance(len)
+	var p = it.clone();
 
-    var p = it.clone();
-
-    space_p(p);
-
-	if (p.top() != "=")
+	if (!str_p(p, "$settings"))
 	{
 		return false;
 	}
-    it.advance()
-	
+
+	space_p(p);
+
+	if (!str_p(p, "="))
+	{
+		// TODO エラー
+		return false;
+	}
+
     space_p(p);
 
-	// if (c != "\"")
-	// {
-	// 	// TODO エラー
-	// 	return false;
-	// }
+	if (p.top() != "{")
+	{
+	 	// TODO エラー
+		return false;
+	}
 	
-	// let begin = pos;
-	// c = it.char(pos++);
-	// while (c != "\"")
-	// {
-	// 	c = it.char(pos++);	
-	// }
-	// let end = pos;
-
-	// //両端の " は除く"
-	// let filepath = it.lineStr.substr(begin, end - begin - 1)
-
-	// c = it.char(pos++);
-	// while ((c == " ") || (c == "\t"))
-	// {
-	// 	c = it.char(pos++);	
-	// }
+	let begin = p.pos;
+	var index = 1;
+	var cur = 1;
+	while (index > 0)
+	{
+		var c = p.char(cur++);
+		switch (c)
+		{
+		case "{": index += 1; break;
+		case "}": index -= 1; break;
+		case "\n":
+		case "":
+		case null: 
+		 	// TODO エラー
+			return false;
+		}
+	}
 	
-	// it.charTop = null
-	// it.column = pos - 1
+	let str = p.lineStr.substr(p.pos, cur)
+	p.advance(cur);
 
-	// it.flush();
-	// it.include(filepath)
+	space_p(p);
+    //onMatch(str);
 
 	return true
 }

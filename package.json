@@ -42,6 +42,11 @@
 						"css"
 					],
 					"description": "$include マクロのインテリセンスに対応する拡張子"
+				},
+				"markdowncat.exclusion.headers": {
+					"type": "array",
+					"default": [],
+					"description": "マークダウンファイルに出力しない見出し\nex）[\"TODO\",\"memo\"]"
 				}
 			}
 		},
