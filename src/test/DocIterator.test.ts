@@ -44,8 +44,8 @@ suite("DocIterator Tests", function () {
     
     test("readLine 2", function() {
         let m = new DocBufferBinary(Buffer.from("あいう\r\n\nえお"));
-        assert.equal("あいう", m.readLine());
-        assert.equal("", m.readLine());
+        assert.equal("あいう\r\n", m.readLine());
+        assert.equal("\n", m.readLine());
         assert.equal("えお", m.readLine());
     });
 });

@@ -1,16 +1,20 @@
-import * as vscode from "vscode";
 import { DocIterator } from "../DocIterator";
 import { space_p, str_p } from "./common_p";
 import * as js from "./javascript_p";
 
 export function settings_p(it: DocIterator, onMatch: (str: string) => void): Boolean
 {
-	if (!str_p(it, "$settings"))
+    if (it.top() != "$")
+    {
+        return false;
+    }
+
+	var p = it.clone();
+	
+	if (!str_p(p, "$settings"))
 	{
 		return false;
 	}
-
-	var p = it.clone();
 
 	space_p(p);
 

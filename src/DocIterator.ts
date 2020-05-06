@@ -27,19 +27,14 @@ export class DocIterator
 		return it;
 	}
 
-	get isEOL(): boolean
+ 	needRead(offset: number = 0): boolean
 	{
-		return this.pos >= this.lineStr.length;
-	}
-
-	get needRead(): boolean
-	{
-		return this.pos >= this.lineStr.length;
+		return (this.pos + offset) >= this.lineStr.length;
 	}
 
 	isEnd()
 	{
-		return this.isEOL && this.buffer.isEmpty;
+		return this.needRead() && this.buffer.isEmpty;
 	}
 
 	readLine()
@@ -50,7 +45,7 @@ export class DocIterator
 
 	top()
 	{		
-		if (this.needRead)
+		if (this.needRead(0))
 		{
 			this.readLine();
 		}
@@ -70,7 +65,7 @@ export class DocIterator
 
 	char(offset: number)
 	{
-		if (this.needRead)
+		if (this.needRead(offset))
 		{
 			this.readLine();
 		}
@@ -79,7 +74,7 @@ export class DocIterator
 
 	str(offset: number, len: number)
 	{
-		if (this.needRead)
+		if (this.needRead())
 		{
 			this.readLine();
 		}

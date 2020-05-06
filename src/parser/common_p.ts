@@ -1,11 +1,10 @@
-import * as vscode from "vscode";
 import { DocIterator } from "../DocIterator";
-import { strict } from "assert";
+
 
 export function space_p(it: DocIterator): Boolean
 {
-	var pos = 0;
 	var c = it.top();
+	var pos = 0;
 	while ((c == " ") || (c == "\t"))
 	{
 		++pos;
@@ -74,34 +73,28 @@ export function block_comment_p(it: DocIterator): Boolean
 		return false;
 	}
 
-	var pos = 2;
-	var c = it.char(pos++);
+	var bMacth = false;
+	var count = 2;
+	var c = "";
 	do
 	{
-		if (!c)
-		{
-			it.readLine();
-			if (it.isEnd())
-			{
-				//TODO:エラー
-				return false;
-			}
-			//改行文字分
-			pos += 1;
-		}
+		c = it.char(count++);
 
-		c = it.char(pos++);
-		if (c != "*") {
+		if (c != "*")
+		{
 			continue
 		}
 
-		c = it.char(pos++);
+		c = it.char(count++);
 		if (c == "/") {
-			it.pos = pos
-			return true
+			bMacth = true;
+			it.advance(count);
+			break;
 		}
 
-	} while(true);
+	} while(c);
+
+	return bMacth;
 }
 
 
@@ -112,123 +105,3 @@ export function line_any_p(it: DocIterator): Boolean
 	return true
 }
 
-
-
-export function object_p(it: DocIterator): Boolean
-{
-	if (it.top() != "{")
-	{
-		return false;
-	}
-	it.advance();
-
-    var p = it.clone();
-
-	var pos = 0;
-	var c = it.top();
-	do
-	{
-		if (!c)
-		{
-			it.readLine();
-			if (it.isEnd())
-			{
-				//TODO:エラー
-				return true;
-			}
-
-			pos = 0;
-		}
-
-		c = it.char(pos++);
-		if (c != "}") {
-			continue
-		}
-
-		c = it.char(pos++);
-		if (c == "}") {
-			it.pos = pos
-			return true
-		}
-
-	} while(true);
-}
-
-
-
-///	正規表現
-export function reg_p(it: DocIterator, pattern: RegExp): Boolean
-{
-	if (it.needRead)
-	{
-		it.readLine();
-	}
-
-	if (it.top() != "\"")
-	{
-		return false;
-	}
-
-	var bMacth = false;
-	var cur = 1;
-	var c = it.char(cur++);
-	while (c)
-	{
-		if (c == "\\")
-		{
-			c = it.char(cur++);
-			c = it.char(cur++);
-		}
-
-		if (c == "\"")
-		{
-			bMacth = true;
-			break;
-		}
-	}
-
-	c == "\""
-
-	"\"" && reg_p(it, /[^"]*/) && "\"";
-
-
-	let m = it.lineStr.match(pattern)
-	if (!m)
-	{
-		return false;
-	}
-
-	var str = "";
-	it.advance();
-
-    var p = it.clone();
-
-	var pos = 0;
-	var c = it.top();
-	do
-	{
-		if (!c)
-		{
-			it.readLine();
-			if (it.isEnd())
-			{
-				//TODO:エラー
-				return true;
-			}
-
-			pos = 0;
-		}
-
-		c = it.char(pos++);
-		if (c != "}") {
-			continue
-		}
-
-		c = it.char(pos++);
-		if (c == "}") {
-			it.pos = pos
-			return true
-		}
-
-	} while(true);
-}

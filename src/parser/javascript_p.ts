@@ -26,14 +26,10 @@ export function string_p(it: DocIterator): Boolean
 		if (c == bracke)
 		{
 			bMacth = true;
+            it.advance(count);
 			break;
 		}
 	} while (c && (c != "\n"));
-
-    if (bMacth)
-    {
-        it.advance(count);
-    }
 
     return bMacth;
 }
