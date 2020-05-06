@@ -47,6 +47,11 @@
 					"type": "array",
 					"default": [],
 					"description": "マークダウンファイルに出力しない見出し\nex）[\"TODO\",\"memo\"]"
+				},
+				"markdowncat.newpage": {
+					"type": "string",
+					"default": "",
+					"description": "$newpage マクロで展開する文字列"
 				}
 			}
 		},

@@ -7,7 +7,8 @@ import { space_p, eol_p, line_comment_p, block_comment_p, line_any_p } from "./p
 import { include_p } from "./parser/include_p";
 import * as md from "./parser/markdown_p";
 import { settings_p } from "./parser/settings_p";
-import { extractExtentision } from "./mdcatUtility";
+import * as mdcat from "./parser/mdcat_p";
+import { extractExtentision, getEOL } from "./mdcatUtility";
 import { ExclusionHeader } from "./ExclusionHeader";
 
 
@@ -21,6 +22,8 @@ export class ExpandMdcat
     exclusionHeaders: string[]
     exclusionHeader: ExclusionHeader | null = null;
 
+    newpage: string = "";
+
     includingFile: string | null = null;
 
     constructor(doc: vscode.TextDocument)
@@ -28,7 +31,7 @@ export class ExpandMdcat
         this.doc = doc;
         this.outputFilePath = this.getOutputFilePath(doc.fileName);
         this.docDir = path.dirname(this.outputFilePath);
-        this.eol = (this.doc.eol == vscode.EndOfLine.CRLF) ? "\r\n" : "\n";
+        this.eol = getEOL(this.doc);
         this.exclusionHeaders = [];
     }
 
@@ -68,16 +71,12 @@ export class ExpandMdcat
             if (it.top() == "$")
             {
                 // インクルードファイルを展開
-                if (include_p(it, filepath => this.onInclude(filepath)))
-                {
+                if (include_p(it, filepath => this.onInclude(filepath))
+                || settings_p(it, str => this.onSettings(str))
+                || mdcat.newpage_p(it, () => this.onNewpage())
+                ){
                     this.onDiscardMatched(it)
                     continue;
-                }
-
-                if (settings_p(it, str => this.onSettings(str)))
-                {                
-                    this.onDiscardMatched(it)
-                    continue;    
                 }
             }
 
@@ -125,6 +124,13 @@ export class ExpandMdcat
     onSettings(str: string): void
     {
         // appendFileSync(this.outputFilePath, "<!-- " + json + " -->" + this.eol)
+    }
+
+    onNewpage(): void
+    {
+        var str = this.newpage;
+        str += this.eol;
+        appendFileSync(this.outputFilePath, str);
     }
 
     onInclude(filepath: string): void
