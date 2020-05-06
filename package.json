@@ -46,7 +46,7 @@
 				"markdowncat.exclusion.headers": {
 					"type": "array",
 					"default": [],
-					"description": "マークダウンファイルに出力しない見出し\nex）[\"TODO\",\"memo\"]"
+					"description": "マークダウンファイルに出力しない見出し\nex）[\"TODO\",\"note\"]"
 				},
 				"markdowncat.newpage": {
 					"type": "string",
