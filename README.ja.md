@@ -12,6 +12,12 @@
 
 ![使い方](images/usage.gif)
 
+### 見出しを除外する
+
+指定した見出しの内容を除外できます。
+
+![usage](images/usage-exclusion.gif)
+
 ### CSSファイルをインクルードする
 
 $includeで cssファイルをインクルードすると \<style\>で囲って出力します。
