@@ -1,6 +1,6 @@
-import { DocIterator } from "../DocIterator";
-import { space_p, str_p } from "./common_p";
-import * as js from "./javascript_p";
+import { DocIterator } from "../../DocIterator";
+import { space_p, str_p } from "../common_p";
+import * as js from "../javascript_p";
 
 
 export function include_p(it: DocIterator, onMatch: (filepath: string) => void): Boolean

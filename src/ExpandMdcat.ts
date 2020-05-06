@@ -9,7 +9,6 @@ import * as mdcat from "./parser/mdcat_p";
 import { extractExtentision, getEOL } from "./mdcatUtility";
 import { ExclusionHeader } from "./ExclusionHeader";
 
-
 export class ExpandMdcat
 {
     doc: vscode.TextDocument
@@ -71,7 +70,7 @@ export class ExpandMdcat
                 // インクルードファイルを展開
                 if (mdcat.include_p(it, filepath => this.onInclude(filepath))
                 || mdcat.newpage_p(it, () => this.onNewpage())
-                || mdcat.settings_p(it, str => this.onSettings(str))
+                || mdcat.settings_p(it, json => this.onSettings(json))
                 ){
                     this.onDiscardMatched(it)
                     continue;
@@ -119,8 +118,13 @@ export class ExpandMdcat
         it.discardMatched();
     }
 
-    onSettings(str: string): void
+    onSettings(json: string): void
     {
+		try {
+            let obj = JSON.parse(json);
+		} catch (err) {
+            //console.error(err);
+		}
         // appendFileSync(this.outputFilePath, "<!-- " + json + " -->" + this.eol)
     }
 

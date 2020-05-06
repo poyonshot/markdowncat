@@ -2,8 +2,7 @@ import * as vscode from "vscode";
 import * as assert from 'assert';
 import { DocIterator } from "../../DocIterator";
 import { DocBufferBinary } from "../../DocBuffer";
-import { settings_p } from "../../parser/settings_p";
-
+import { settings_p } from "../../parser/mdcat_parser/settings_p";
     
 function createTestIterator(str: string): DocIterator
 {
@@ -26,6 +25,7 @@ suite("settings_2p Tests", function () {
     });
 
     test("2", function() {
+
 
         var it = createTestIterator("$settings= { }");
         assert.equal(true, settings_p(it, json => null));

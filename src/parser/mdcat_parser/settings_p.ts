@@ -1,8 +1,8 @@
-import { DocIterator } from "../DocIterator";
-import { space_p, str_p } from "./common_p";
-import * as js from "./javascript_p";
+import { DocIterator } from "../../DocIterator";
+import { space_p, str_p } from "../common_p";
+import * as js from "../javascript_p";
 
-export function settings_p(it: DocIterator, onMatch: (str: string) => void): Boolean
+export function settings_p(it: DocIterator, onMatch: (json: string) => void): Boolean
 {
     if (it.top() != "$")
     {
