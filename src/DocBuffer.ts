@@ -1,10 +1,4 @@
 import * as vscode from "vscode";
-import * as path from "path";
-
-import { DocIterator } from "./DocIterator";
-import { writeFile, appendFile, readFile, appendFileSync, readFileSync, writeFileSync, fstatSync } from 'fs';
-import { extractExtentision } from "./mdcatUtility";
-import { strict } from "assert";
 
 
 export interface DocBuffer 

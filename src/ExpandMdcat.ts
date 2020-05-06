@@ -4,9 +4,7 @@ import { writeFile, appendFile, readFile, appendFileSync, readFileSync, writeFil
 import { DocIterator } from "./DocIterator";
 import { DocBufferTextDocument, DocBufferBinary } from "./DocBuffer";
 import { space_p, eol_p, line_comment_p, block_comment_p, line_any_p } from "./parser/common_p";
-import { include_p } from "./parser/include_p";
 import * as md from "./parser/markdown_p";
-import { settings_p } from "./parser/settings_p";
 import * as mdcat from "./parser/mdcat_p";
 import { extractExtentision, getEOL } from "./mdcatUtility";
 import { ExclusionHeader } from "./ExclusionHeader";
@@ -71,9 +69,9 @@ export class ExpandMdcat
             if (it.top() == "$")
             {
                 // インクルードファイルを展開
-                if (include_p(it, filepath => this.onInclude(filepath))
-                || settings_p(it, str => this.onSettings(str))
+                if (mdcat.include_p(it, filepath => this.onInclude(filepath))
                 || mdcat.newpage_p(it, () => this.onNewpage())
+                || mdcat.settings_p(it, str => this.onSettings(str))
                 ){
                     this.onDiscardMatched(it)
                     continue;

@@ -1,7 +1,3 @@
-import * as vscode from "vscode";
-import * as path from "path";
-import { writeFile, appendFile, readFile, appendFileSync, readFileSync, writeFileSync, fstatSync } from 'fs';
-import { extractExtentision } from "./mdcatUtility";
 import { DocBuffer } from "./DocBuffer";
 
 
