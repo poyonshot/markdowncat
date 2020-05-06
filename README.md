@@ -15,7 +15,7 @@ Generate single markdown file by merging a set of markdown files.
 
 ![usage](images/usage.gif)
 
-### Exclusion Header
+### Exclude Header
 
 ![usage](images/usage-exclusion.gif)
 
