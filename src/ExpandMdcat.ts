@@ -74,8 +74,10 @@ export class ExpandMdcat
                     continue;
                 }
 
-                if (settings_p(it, json => this.onSettings(json)))
-                {                    
+                if (settings_p(it, str => this.onSettings(str)))
+                {                
+                    this.onDiscardMatched(it)
+                    continue;    
                 }
             }
 
@@ -120,7 +122,7 @@ export class ExpandMdcat
         it.discardMatched();
     }
 
-    onSettings(json: string): void
+    onSettings(str: string): void
     {
         // appendFileSync(this.outputFilePath, "<!-- " + json + " -->" + this.eol)
     }

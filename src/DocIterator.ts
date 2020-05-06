@@ -87,9 +87,9 @@ export class DocIterator
 		return this.lineStr.slice(begin, begin + len);
 	}
 
-	getMatched(): string
+	getMatched(begin: number = 0): string
 	{
-		return (this.pos >  0) ? this.lineStr.substr(0, this.pos) : "";
+		return (this.pos >  begin) ? this.lineStr.substr(begin, this.pos) : "";
 	}
 
 	discardMatched(): void
