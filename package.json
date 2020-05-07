@@ -2,7 +2,7 @@
 	"name": "markdowncat",
 	"displayName": "MarkdownCat",
 	"description": "Generate single markdown file by merging a set of markdown files.",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"engines": {
 		"vscode": "^1.33.0"
 	},
@@ -34,9 +34,24 @@
 					"description": "comment color."
 				},
 				"markdowncat.intellisense.includeExts": {
-					"type": ["string"],
-					"default": ["md", "css"],
+					"type": [
+						"string"
+					],
+					"default": [
+						"md",
+						"css"
+					],
 					"description": "$include マクロのインテリセンスに対応する拡張子"
+				},
+				"markdowncat.exclusion.headers": {
+					"type": "array",
+					"default": [],
+					"description": "マークダウンファイルに出力しない見出し\nex）[\"TODO\",\"note\"]"
+				},
+				"markdowncat.newpage": {
+					"type": "string",
+					"default": "",
+					"description": "$newpage マクロで展開する文字列"
 				}
 			}
 		},
@@ -85,11 +100,11 @@
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"devDependencies": {
-		"typescript": "^3.3.1",
-		"vscode": "^1.1.28",
-		"tslint": "^5.12.1",
+		"@types/mocha": "^2.2.42",
 		"@types/node": "^10.12.21",
-		"@types/mocha": "^2.2.42"
+		"tslint": "^5.20.1",
+		"typescript": "^3.3.1",
+		"vscode": "^1.1.28"
 	},
 	"license": "SEE LICENSE IN LICENSE.txt",
 	"bugs": {

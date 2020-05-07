@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { getEOL } from "./mdcatUtility";
 
 export default function ()
 {
@@ -20,6 +21,6 @@ export default function ()
     //console.log(editor.selection)
     editor.edit((editBuilder) => {
         let pos = new vscode.Position(targetLine, 0);
-        editBuilder.insert(pos, "<div style=\"page-break-before:always\"></div>\n")
+        editBuilder.insert(pos, "$newpage" + getEOL(doc))
     });
 }
