@@ -10,27 +10,28 @@ export function header_p(it: DocIterator, onMatch: (level: number, header: strin
 
     var p = it.clone();
     
-	var cur = 0;
+	var count = 0;
 	var c = p.top();
     while (c == "#")
 	{
-		++cur;
-	 	c = p.char(cur);	
+		++count;
+	 	c = p.char(count);	
     }
-    p.advance(cur)
-    let level = cur;
+    p.advance(count)
+    let level = count;
 
     space_p(p);
     
     //改行まで
-	var c = p.top();
+    var c = p.top();
+    count = 0;
     while (c && (c != "\n"))
 	{
-		++cur;
-	 	c = p.char(cur);	
+		++count;
+	 	c = p.char(count);	
 	}
-	let header = p.lineStr.substr(p.pos, cur - 1).trim();
-	p.advance(cur);
+	let header = p.lineStr.substr(p.pos, count).trim();
+	p.advance(count);
 
     it.advance(p.pos - it.pos);
     onMatch(level, header);
