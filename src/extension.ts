@@ -1,11 +1,12 @@
 import * as vscode from 'vscode';
 import { workspace } from "vscode";
 import DocumentDecoration from "./documentDecoration";
-import expandMdcatFile from "./expandMdcatFile"
-import insertNewPage from "./insertNewPage"
-import MdcatCompletionProvider from "./mdcatCompletionProvider"
-import FilePathCompletionProvider from "./filePathCompletionProvider"
-import { print } from 'util';
+import expandMdcatFile from "./expandMdcatFile";
+import insertNewPage from "./insertNewPage";
+import MdcatCompletionProvider from "./mdcatCompletionProvider";
+import FilePathCompletionProvider from "./filePathCompletionProvider";
+import { mdcatTable } from './mdcatTablePlugin';
+import MarkdownIt from 'markdown-it';
 
 
 function initConfig() {
@@ -31,9 +32,11 @@ function initConfig() {
 }
 
 
+
+
 export function activate(context: vscode.ExtensionContext) {
 	
-	initConfig()
+	initConfig();
 
 	var  curEditor = vscode.window.activeTextEditor;
 
@@ -41,8 +44,8 @@ export function activate(context: vscode.ExtensionContext) {
 	let documentDecoration = new DocumentDecoration();
 	documentDecoration.requestUpdate(curEditor, 0);
 
-	let filePathCompletion = new FilePathCompletionProvider()
-	filePathCompletion.searchFiles()
+	let filePathCompletion = new FilePathCompletionProvider();
+	filePathCompletion.searchFiles();
 
 
 	context.subscriptions.push(
@@ -57,13 +60,21 @@ export function activate(context: vscode.ExtensionContext) {
 				return;
 			}
 			documentDecoration.requestUpdate(curEditor, 0);
-			filePathCompletion.searchFiles()
+			filePathCompletion.searchFiles();
 		}),
 
 		workspace.onDidChangeTextDocument((event) => {
 			documentDecoration.requestUpdate(curEditor, 200);
 		}),
 	);
+
+	return {
+		extendMarkdownIt(md: any) {
+			md.use(require('markdown-it-emoji'))
+			  .use(mdcatTable);
+			return md;
+		}
+	};
 }
 
 // this method is called when your extension is deactivated

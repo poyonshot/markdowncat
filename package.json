@@ -24,6 +24,10 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"markdown.markdownItPlugins": true,
+		"markdown.previewScripts": [
+			"./src/preview.ts"
+		],
 		"configuration": {
 			"type": "object",
 			"title": "markdowncat configuration",
@@ -100,8 +104,9 @@
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"devDependencies": {
-		"@types/mocha": "^2.2.42",
-		"@types/node": "^10.12.21",
+		"@types/markdown-it": "^12.0.0",
+		"@types/mocha": "^2.2.48",
+		"@types/node": "^10.17.50",
 		"tslint": "^5.20.1",
 		"typescript": "^3.3.1",
 		"vscode": "^1.1.28"
@@ -115,5 +120,11 @@
 		"type": "git",
 		"url": "https://github.com/poyonshot/markdowncat.git"
 	},
-	"homepage": "https://poyonshot.hatenablog.com/"
+	"homepage": "https://poyonshot.hatenablog.com/",
+	"dependencies": {
+		"markdown-it": "^12.0.4",
+		"markdown-it-container": "^3.0.0",
+		"markdown-it-emoji": "^2.0.0",
+		"markdown-it-named-code-blocks": "^0.1.0"
+	}
 }
