@@ -6,7 +6,6 @@ import insertNewPage from "./insertNewPage";
 import MdcatCompletionProvider from "./mdcatCompletionProvider";
 import FilePathCompletionProvider from "./filePathCompletionProvider";
 import { mdcatTable } from './mdcatTablePlugin';
-import MarkdownIt from 'markdown-it';
 
 
 function initConfig() {
@@ -38,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
 	
 	initConfig();
 
-	var  curEditor = vscode.window.activeTextEditor;
+	var curEditor = vscode.window.activeTextEditor;
 
 	//ドキュメントオープン時にアクティベーションしているので、この時点でドキュメントを装飾する
 	let documentDecoration = new DocumentDecoration();
@@ -70,8 +69,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	return {
 		extendMarkdownIt(md: any) {
-			md.use(require('markdown-it-emoji'))
-			  .use(mdcatTable);
+			md.use(mdcatTable);
 			return md;
 		}
 	};
