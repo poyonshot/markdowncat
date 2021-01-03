@@ -1,6 +1,5 @@
 import MarkdownIt from 'markdown-it';
 import Token from 'markdown-it/lib/token';
-import Renderer from 'markdown-it/lib/renderer';
 
 
 class TokenIterator
@@ -49,165 +48,205 @@ class TableItem {
 }
 
 
-
-
-
-function table_p(it: TokenIterator, mapTableItem: { [label: string]: TableItem }, options : MarkdownIt.Options, md: MarkdownIt): boolean
+class MdcatTablePlugin
 {
-	if (it.isEnd() || (it.get().type != 'table_open'))
+	md : MarkdownIt;
+	options : MarkdownIt.Options;
+	env : any;
+
+	tableStartPos = 0;
+	tableEndPos = 0;
+	tableItemMap: { [label: string]: TableItem } = {};
+
+	constructor(md : MarkdownIt, options : MarkdownIt.Options, env : any)
 	{
-		return false;
-	}
+		this.md = md;
+		this.options = options;
+		this.env = env;
+    }
+    
+	render(src: string): string
+	{	
+		var tokens = this.md.parse(src, this.env);
 
-	var column = 0;
-	var row = 0;
-
-	for (; !it.isEnd(); it.advance())
-	{
-		let token = it.get();
-
-		if (token.type == 'tr_close')
+		if (this.initPrms(tokens))
 		{
-			column += 1;
-			row = 0;
-			continue;
-		}
-
-		if ((token.type == 'td_close') || (token.type == 'th_close'))
-		{
-			let label = `${column}-${row}`;
-
-			let lastToken = it.tokens[it.pos - 1];
-			lastToken.content = label;
-			let m = mapTableItem[label]
-			if (m != null)
+			var it = new TokenIterator(tokens);
+			it.pos = this.tableStartPos;
+	
+			var tableTokens = this.buildTableToken(it);
+			if (tableTokens != null)
 			{
-				lastToken.children = it.tokens.slice(m.startPos, m.endPos);
-
-				var s = md.renderer.render(lastToken.children, options, {});
-				lastToken.content = s;
-				lastToken.type = 'html_block';
+				tokens = tableTokens;
 			}
-
-			row += 1;
-			continue;
 		}
 
-		if (token.type == 'table_close')
+		let s = this.md.renderer.render(tokens, this.options, this.env);
+		return s;
+	}
+	
+	findToken(tokens: Token[], begin: number, type: string): number
+	{
+		for (var pos = begin; pos < tokens.length; ++pos)
 		{
-			it.advance();
-			return true;
+			if (tokens[pos].type === type)
+			{
+				return pos;
+			}
 		}
+
+		return -1;
 	}
 
-	return true;
-}
-
-function tableItem_p(it: TokenIterator, item: TableItem): boolean
-{
-	if (it.isEnd() || (it.get().type != 'heading_open'))
+	initPrms(tokens: Token[]): boolean
 	{
-		return false;
-	}
+		this.tableStartPos = 0;
+		this.tableEndPos = 0;
+		this.tableItemMap = {};
 
-	for (it.advance(); !it.isEnd(); it.advance())
-	{
-		var token = it.get();
 
-		if (token.type == 'inline')
+		this.tableStartPos = this.findToken(tokens, 0, 'table_open');
+		if (this.tableStartPos < 0)
 		{
-			item.label = token.content;
-			continue;
+			return false;
 		}
 		
-		if (token.type == 'heading_close')
+		this.tableEndPos = this.findToken(tokens, this.tableStartPos + 1, 'table_close');
+		if (this.tableEndPos < 0)
 		{
-			it.advance();
+			return false;
+		}
+		this.tableEndPos += 1;
+
+
+		var it = new TokenIterator(tokens);
+		it.pos = this.tableEndPos;
+
+		while (!it.isEnd())
+		{
+			var item = this.tableItem_p(it);
+			if (item == null) 
+			{
+				it.advance();
+				continue;
+			}		 
+			this.tableItemMap[item.label] = item;
+		}
+
+		return true;
+	}
+		
+	tableItem_p(it: TokenIterator): TableItem | null
+	{
+		if (it.isEnd() || (it.get().type !== 'heading_open'))
+		{
+			return null;
+		}
+
+		let item = new TableItem();
+
+		for (it.advance(); !it.isEnd(); it.advance())
+		{
+			var token = it.get();
+
+			if (token.type === 'inline')
+			{
+				item.label = token.content;
+				continue;
+			}
+			
+			if (token.type === 'heading_close')
+			{
+				it.advance();
+				break;
+			}
+		}
+
+		//開始位置
+		item.startPos = it.pos;
+
+		for (; !it.isEnd(); it.advance())
+		{
+			if (it.get().type !== 'heading_open')
+			{
+				continue;
+			}
+			
 			break;
 		}
+
+		//終了位置
+		item.endPos = it.pos;
+
+		return item;
 	}
 
-	//開始位置
-	item.startPos = it.pos;
-
-	for (; !it.isEnd(); it.advance())
-	{
-		var token = it.get();
-
-		if (token.type != 'heading_open')
+	
+	buildTableToken(it: TokenIterator): Token[] | null
+	{	
+		if (it.isEnd() || (it.get().type !== 'table_open'))
 		{
-			continue;
+			return null;
 		}
 		
-		break;
-	}
+		var column = 0;
+		var row = 0;
 
-	//終了位置
-	item.endPos = it.pos;
-
-	return true;
-}
-
-
-
-function parseContent(src: string, options : MarkdownIt.Options, env: any, md: MarkdownIt): Token[]
-{
-	var tokens = md.parse(src, {});
-
-	var it = new TokenIterator(tokens);
-
-	const mapTableItem: { [label: string]: TableItem } = {};
-
-	while (!it.isEnd())
-	{
-		var item = new TableItem();
-		if (!tableItem_p(it, item)) 
+		for (; !it.isEnd(); it.advance())
 		{
-			it.advance();
-			continue;
-		}
-		 
-		mapTableItem[item.label] = item;
-	}
+			let token = it.get();
 
-	var start = 0;
-	it = new TokenIterator(tokens);
-	while (!it.isEnd())
-	{
-		start = it.pos;
-		if (!table_p(it, mapTableItem, options, md)) 
-		{
-			it.advance();
-			continue;
-		}
-		 
-		break;
-	}
+			if (token.type === 'tr_close')
+			{
+				column += 1;
+				row = 0;
+				continue;
+			}
 
-	return tokens.slice(start, it.pos);
+			if ((token.type === 'td_close') || (token.type === 'th_close'))
+			{
+				let label = `${column}-${row}`;
+
+				let lastToken = it.tokens[it.pos - 1];
+				lastToken.content = label;
+
+				let m = this.tableItemMap[label];
+				if (m != null)
+				{
+					lastToken.children = it.tokens.slice(m.startPos, m.endPos);
+					lastToken.content = this.md.renderer.render(lastToken.children, this.options, this.env);
+					lastToken.type = 'html_block';
+				}
+
+				row += 1;
+				continue;
+			}
+
+			if (token.type === 'table_close')
+			{
+				it.advance();
+				break;
+			}
+		}
+
+		return it.tokens.slice(0, it.pos);
+	}
 }
-
 
 
 export function mdcatTable(md : MarkdownIt, options : MarkdownIt.Options): MarkdownIt {
-
-	// var defaults = {
-	//   defs: {},
-	//   shortcuts: {},
-	//   enabled: []
-	// };
   
 	const defaultRender = md.renderer.rules.fence;
 
 	md.renderer.rules.fence = (tokens, idx, options, env, self) => {
+	
 		let token = tokens[idx];
 		let info = token.info ? String(token.info).trim() : "";
 		
-		if (info == "mdcat.table")
+		if (info === "mdcat.table")
 		{
-			let tableTokens = parseContent(token.content, options, env, md);		
-			let s = md.renderer.render(tableTokens, options, env);
-			return s;
+			const m = new MdcatTablePlugin(md, options, env);
+			return m.render(token.content);
 		}
 
 		return defaultRender?.(tokens, idx, options, env, self).toString() ?? "";

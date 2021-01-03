@@ -122,9 +122,6 @@
 	},
 	"homepage": "https://poyonshot.hatenablog.com/",
 	"dependencies": {
-		"markdown-it": "^12.0.4",
-		"markdown-it-container": "^3.0.0",
-		"markdown-it-emoji": "^2.0.0",
-		"markdown-it-named-code-blocks": "^0.1.0"
+		"markdown-it": "^12.0.4"
 	}
 }
