@@ -213,9 +213,20 @@ class MdcatTablePlugin
 				let m = this.tableItemMap[label];
 				if (m != null)
 				{
-					lastToken.children = it.tokens.slice(m.startPos, m.endPos);
-					lastToken.content = this.md.renderer.render(lastToken.children, this.options, this.env);
-					lastToken.type = 'html_block';
+					let children = it.tokens.slice(m.startPos, m.endPos);
+					if ((children.length == 3) && (children[0].type == "paragraph_open"))
+					{
+						// <p>xxx</p> だけの場合
+						lastToken.children = []
+						lastToken.content = children[1].content;
+						lastToken.type = 'html_block';	
+					}
+					else
+					{
+						lastToken.children = children;
+						lastToken.content = this.md.renderer.render(lastToken.children, this.options, this.env);
+						lastToken.type = 'html_block';	
+					}
 				}
 
 				row += 1;
