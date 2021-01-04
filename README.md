@@ -23,6 +23,13 @@ Generate single markdown file by merging a set of markdown files.
 
 ![usage](images/usage-css.gif)
 
+### table
+See [japanease README](README.ja.md)
+
+![使い方](images/usage-table-3.png)
+
+
+
 ## License
 
 The source code and strings are licensed under the [MIT](license.md) license.

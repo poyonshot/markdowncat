@@ -1,5 +1,6 @@
 # Change Log
 
+- 0.4.0 add : mdcat.table
 - 0.3.0 add : exclusion header, $newpage 
 - 0.2.0 fix：Does not work on vscode-Mac if $include contains line breaks. 
 - 0.0.7 include css.
