@@ -1,8 +1,8 @@
 import MarkdownIt from 'markdown-it';
 import Token from 'markdown-it/lib/token';
+import { mergeTableCell } from './mdCatTableMergeCell';
 
-
-class TokenIterator
+export class TokenIterator
 {
 	tokens: Token[];
 	pos: number;
@@ -74,6 +74,18 @@ class MdcatTablePlugin
 			var it = new TokenIterator(tokens);
 			it.pos = this.tableStartPos;
 	
+			let mergedTokens = mergeTableCell(it);
+			if (mergedTokens != null)
+			{
+				it.tokens.splice(this.tableStartPos, this.tableEndPos - this.tableStartPos);
+				for (var i = 0; i < mergedTokens.length; ++i)
+				{
+					it.tokens.splice(this.tableStartPos + i, 0, mergedTokens[i]);
+				}
+				this.tableEndPos = this.tableStartPos + mergedTokens.length;	
+			}
+
+			it.pos = this.tableStartPos;
 			var tableTokens = this.buildTableToken(it);
 			if (tableTokens != null)
 			{
@@ -82,6 +94,7 @@ class MdcatTablePlugin
 		}
 
 		let s = this.md.renderer.render(tokens, this.options, this.env);
+		console.log(s);
 		return s;
 	}
 	
