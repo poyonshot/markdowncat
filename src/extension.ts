@@ -5,8 +5,7 @@ import expandMdcatFile from "./expandMdcatFile";
 import insertNewPage from "./insertNewPage";
 import MdcatCompletionProvider from "./mdcatCompletionProvider";
 import FilePathCompletionProvider from "./filePathCompletionProvider";
-import { mdcatTable } from './mdcatTablePlugin';
-import { mdcatTableMergeCell } from './mdcatTableMergeCell';
+import { mdcatTablePlugin } from './mdcatTablePlugin';
 
 
 function initConfig() {
@@ -70,10 +69,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	return {
 		extendMarkdownIt(md: any) {
-			md
-			.use(mdcatTable)
-			.use(mdcatTableMergeCell)
-			  ;
+			md.use(mdcatTablePlugin);
 			return md;
 		}
 	};
