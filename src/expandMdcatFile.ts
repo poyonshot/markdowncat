@@ -11,16 +11,15 @@ export default function expandMdcatFile() {
     }
 
 	let doc = editor!.document;            // ドキュメント取得
-	
-    
+	    
 	let mdcat = new ExpandMdcat(doc);
 
-    mdcat.exclusionHeaders = vscode.workspace.getConfiguration().get('markdowncat.exclusion.headers') || [];
-
-    mdcat.newpage = vscode.workspace.getConfiguration().get('markdowncat.newpage') || "";
-    if (mdcat.newpage.trim() == "")
-    {
-        mdcat.newpage = "<div style=\"page-break-before:always\"></div>";
+    let errMsg = mdcat.loadSettings();
+    if (errMsg.length != 0)
+    {               
+        let caption = 'Failed to read $settings.';
+        vscode.window.showErrorMessage(caption, errMsg);
+        return;
     }
 
     mdcat.run();

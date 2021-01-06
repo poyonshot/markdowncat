@@ -1,0 +1,81 @@
+import * as vscode from "vscode";
+
+
+export class MdcatSettings
+{
+    newpage: string = "";
+    exclusionHeaders: string[] = [];
+    includingFile: string | null = null;
+
+
+    loadConfiguration()
+    {         
+        this.exclusionHeaders = vscode.workspace.getConfiguration().get('markdowncat.exclusion.headers') || [];
+
+        this.newpage = vscode.workspace.getConfiguration().get('markdowncat.newpage') || "";
+        if (this.newpage.trim() == "")
+        {
+            this.newpage = "<div style=\"page-break-before:always\"></div>";
+        }
+    }
+
+
+    load(json: string): string
+    {
+        // appendFileSync(this.outputFilePath, "<!-- " + json + " -->" + this.eol)
+		try {
+            let obj = JSON.parse(json);
+            this.onNewPage(obj["newpage"]);
+            this.onExclusion(obj["exclusion"]);
+            return "";
+		} catch (err) {
+            //console.error(err);
+            return err.message;
+        }
+    }
+
+    onNewPage(value: any)
+    {
+        if (value == null)
+        {
+            return;
+        }
+
+        if (typeof value !== 'string')
+        {
+            throw { message : "Type mismatch : newpage" };
+        }
+
+        this.newpage = value;
+    }
+
+    onExclusion(value: any)
+    {
+        if (value == null)
+        {
+            return;
+        }
+
+        if (typeof value !== 'object')
+        {
+            throw { message : "Type mismatch : exclusion" };
+        }
+         
+        let headers = value["headers"];
+        if (!(headers instanceof Array))
+        {
+            throw { message : "Type mismatch : exclusion.headers" };
+        }
+
+        for (let i in headers)
+        {
+            let h = headers[i];
+            if (typeof h !== 'string')
+            {
+                throw { message : `Type mismatch : exclusion.headers[${i}]` };
+            }    
+        }
+
+        this.exclusionHeaders = headers;
+    }
+}

@@ -8,19 +8,18 @@ import * as md from "./parser/markdown_p";
 import * as mdcat from "./parser/mdcat_p";
 import { extractExtentision, getEOL } from "./mdcatUtility";
 import { ExclusionHeader } from "./ExclusionHeader";
+import { MdcatSettings } from "./MdcatSettings";
+
 
 export class ExpandMdcat
 {
-    doc: vscode.TextDocument
-    docDir: string
-    outputFilePath: string
-    eol : string
-    
-    exclusionHeaders: string[]
+    doc: vscode.TextDocument;
+    docDir: string;
+    outputFilePath: string;
+    eol : string;
+
+    settings = new MdcatSettings();        
     exclusionHeader: ExclusionHeader | null = null;
-
-    newpage: string = "";
-
     includingFile: string | null = null;
 
     constructor(doc: vscode.TextDocument)
@@ -29,26 +28,60 @@ export class ExpandMdcat
         this.outputFilePath = this.getOutputFilePath(doc.fileName);
         this.docDir = path.dirname(this.outputFilePath);
         this.eol = getEOL(this.doc);
-        this.exclusionHeaders = [];
     }
 
     getOutputFilePath(mdcatPath: string)
     {
-        var s = ""
-        s += path.dirname(mdcatPath)
-        s += path.sep
-        s += path.basename(mdcatPath, path.extname(mdcatPath))
-        s += '.md'
-        return s
+        var s = "";
+        s += path.dirname(mdcatPath);
+        s += path.sep;
+        s += path.basename(mdcatPath, path.extname(mdcatPath));
+        s += '.md';
+        return s;
+    }
+
+    loadSettings(): string
+    {
+        var it = new DocIterator(new DocBufferTextDocument(this.doc));
+
+        var jsonSrc = "";
+
+        while (!it.isEnd())
+        {
+            // スペース, 改行
+            if (space_p(it) || eol_p(it))
+            {
+                continue;
+            }
+
+            // コメント
+            if (line_comment_p(it) || block_comment_p(it))
+            {
+                continue;
+            }
+
+            if (mdcat.settings_p(it, json => { jsonSrc = json; }))
+            {  
+                return this.onSettings(jsonSrc);
+            }
+
+            // 改行まで読み捨て
+            if  (line_any_p(it))
+            {
+                continue;
+            }
+        }
+
+        return "";
     }
 
     run()
     {
         this.deleteWorkFiles();
 
-        writeFileSync(this.outputFilePath, "")
+        writeFileSync(this.outputFilePath, "");
         
-        var it = new DocIterator(new DocBufferTextDocument(this.doc))
+        var it = new DocIterator(new DocBufferTextDocument(this.doc));
 
         while (!it.isEnd())
         {
@@ -70,7 +103,7 @@ export class ExpandMdcat
                 // インクルードファイルを展開
                 if (mdcat.include_p(it, filepath => this.onInclude(filepath))
                 || mdcat.newpage_p(it, () => this.onNewpage())
-                || mdcat.settings_p(it, json => this.onSettings(json))
+                || mdcat.settings_p(it, json => {})
                 ){
                     this.onDiscardMatched(it)
                     continue;
@@ -88,7 +121,7 @@ export class ExpandMdcat
 
     deleteWorkFiles(): void
     {
-        this.exclusionHeaders.forEach((header) => {
+        this.settings.exclusionHeaders.forEach((header) => {
             let filePath = ExclusionHeader.createWorkFilePath(this.outputFilePath, header);
             try {
                 statSync(filePath);
@@ -118,19 +151,21 @@ export class ExpandMdcat
         it.discardMatched();
     }
 
-    onSettings(json: string): void
+    onSettings(json: string): string
     {
-		try {
-            let obj = JSON.parse(json);
-		} catch (err) {
-            //console.error(err);
-		}
-        // appendFileSync(this.outputFilePath, "<!-- " + json + " -->" + this.eol)
+        this.settings.loadConfiguration();        
+        return this.settings.load(json);
+    }
+
+    getJsonValue(obj: any, key: string): any | null
+    {
+        let keys = key.split(".");
+        
     }
 
     onNewpage(): void
     {
-        var str = this.newpage;
+        var str = this.settings.newpage;
         str += this.eol;
         appendFileSync(this.outputFilePath, str);
     }
@@ -219,7 +254,7 @@ export class ExpandMdcat
 
         if (this.exclusionHeader == null)
         {
-            if (this.exclusionHeaders.includes(header))
+            if (this.settings.exclusionHeaders.includes(header))
             {
                 this.exclusionHeader = {
                     level : level,
