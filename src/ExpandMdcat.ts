@@ -157,12 +157,6 @@ export class ExpandMdcat
         return this.settings.load(json);
     }
 
-    getJsonValue(obj: any, key: string): any | null
-    {
-        let keys = key.split(".");
-        
-    }
-
     onNewpage(): void
     {
         var str = this.settings.newpage;

@@ -7,24 +7,24 @@ export class MdcatSettings
     exclusionHeaders: string[] = [];
     includingFile: string | null = null;
 
-    static snippet(eol: string): string
+    static snippetSettings(eol: string): string
     {
         return '{' + eol
-            + '    "newpage" : "",' + eol
+            + '    "newpage" : null,' + eol
             + '    "exclusion" : { "headers" : [] }' + eol
             + '}' + eol;    
     }
     
+    static snippetNewline(): string
+    {
+        return "<div style=\"page-break-before:always\"></div>";
+    }
 
     loadConfiguration()
     {         
         this.exclusionHeaders = vscode.workspace.getConfiguration().get('markdowncat.exclusion.headers') || [];
 
-        this.newpage = vscode.workspace.getConfiguration().get('markdowncat.newpage') || "";
-        if (this.newpage.trim() == "")
-        {
-            this.newpage = "<div style=\"page-break-before:always\"></div>";
-        }
+        this.newpage = vscode.workspace.getConfiguration().get('markdowncat.newpage') || MdcatSettings.snippetNewline();
     }
 
 

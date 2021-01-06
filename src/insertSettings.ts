@@ -23,6 +23,6 @@ export default function ()
     //console.log(editor.selection)
     editor.edit((editBuilder) => {
         let pos = new vscode.Position(targetLine, 0);
-        editBuilder.insert(pos, "$settings=" + MdcatSettings.snippet(getEOL(doc)));
+        editBuilder.insert(pos, "$settings=" + MdcatSettings.snippetSettings(getEOL(doc)));
     });
 }
