@@ -18,6 +18,10 @@
 
 ![usage](images/usage-exclusion.gif)
 
+設定を .mdcat ファイルに記述できます。
+
+![usage](images/usage-exclusion-2.png)
+
 ### CSSファイルをインクルードする
 
 $includeで cssファイルをインクルードすると \<style\>で囲って出力します。
