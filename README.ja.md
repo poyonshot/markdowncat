@@ -94,6 +94,51 @@ Markdown 記法と合わせて使うことができます。
 
 ![使い方](images/usage-table-3.png)
 
+セルを結合できます
+
+```mdcat.table
+
+|left  |center|right |
+|:-----|:----:|-----:|
+|>     |>     |      |
+|      |<     |<     |
+|      |<     |      |
+|^     |^     |      |
+
+# 1-0
+Cell A
+
+# 2-0
+Cell B
+
+# 3-0
+Cell C
+
+# 3-2
+Cell D
+
+# 4-2
+Cell E
+```
+
+![使い方](images/usage-table-4.png)
+
+セルにラベルをつけられます
+
+```mdcat.table
+
+|left  |center|right |
+|:-----|:----:|-----:|
+|      |>     |      |
+|>     |hello |<     |
+|      |<     |      |
+
+# hello 
+Hello World!
+```
+
+![使い方](images/usage-table-5.png)
+
 
 ## License
 
