@@ -2,7 +2,7 @@
 	"name": "markdowncat",
 	"displayName": "MarkdownCat",
 	"description": "Generate single markdown file by merging a set of markdown files.",
-	"version": "0.4.1",
+	"version": "0.4.2",
 	"engines": {
 		"vscode": "^1.33.0"
 	},
@@ -67,19 +67,28 @@
 			{
 				"command": "extension.insertNewPage",
 				"title": "New page"
+			},
+			{
+				"command": "extension.insertSettings",
+				"title": "Insert settings snippet"
 			}
 		],
 		"menus": {
 			"editor/context": [
 				{
 					"when": "resourceExtname == .mdcat",
-					"command": "extension.insertNewPage",
+					"command": "extension.expandMdcat",
 					"group": "YourGroup@1"
 				},
 				{
 					"when": "resourceExtname == .mdcat",
-					"command": "extension.expandMdcat",
-					"group": "YourGroup@1"
+					"command": "extension.insertNewPage",
+					"group": "YourGroup@2"
+				},
+				{
+					"when": "resourceExtname == .mdcat",
+					"command": "extension.insertSettings",
+					"group": "YourGroup@3"
 				}
 			]
 		},

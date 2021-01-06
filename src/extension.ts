@@ -3,6 +3,7 @@ import { workspace } from "vscode";
 import DocumentDecoration from "./documentDecoration";
 import expandMdcatFile from "./expandMdcatFile";
 import insertNewPage from "./insertNewPage";
+import insertSettings from "./insertSettings";
 import MdcatCompletionProvider from "./mdcatCompletionProvider";
 import FilePathCompletionProvider from "./filePathCompletionProvider";
 import { mdcatTablePlugin } from './mdcatTablePlugin';
@@ -50,6 +51,8 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('extension.expandMdcat', expandMdcatFile),
 		vscode.commands.registerCommand('extension.insertNewPage', insertNewPage),
+		vscode.commands.registerCommand('extension.insertSettings', insertSettings),
+		
 		vscode.languages.registerCompletionItemProvider("poyonshotmdcat", new MdcatCompletionProvider(), '$'),
 		vscode.languages.registerCompletionItemProvider("poyonshotmdcat", filePathCompletion, '='),
 		

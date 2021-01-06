@@ -7,6 +7,14 @@ export class MdcatSettings
     exclusionHeaders: string[] = [];
     includingFile: string | null = null;
 
+    static snippet(eol: string): string
+    {
+        return '{' + eol
+            + '    "newpage" : "",' + eol
+            + '    "exclusion" : { "headers" : [] }' + eol
+            + '}' + eol;    
+    }
+    
 
     loadConfiguration()
     {         
