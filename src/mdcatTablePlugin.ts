@@ -326,19 +326,6 @@ class MdcatTable
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 class MdcatTablePlugin
 {
 	md : MarkdownIt;
@@ -375,7 +362,7 @@ class MdcatTablePlugin
 		}
 
 		let s = this.md.renderer.render(tokens, this.options, this.env);
-		console.log(s);
+		//console.log(s);
 		return s;
 	}
 
