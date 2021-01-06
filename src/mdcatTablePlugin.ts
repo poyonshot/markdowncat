@@ -71,7 +71,7 @@ class TableCell
     colspan: number;
     rowspan: number;
 	symbol = MergeSymbol.None;
-	custumLabel = "";
+	customLabel = "";
 	
     tokenOpen: Token | null = null;
     tokenBegin = 0;
@@ -87,9 +87,9 @@ class TableCell
         this.rowspan = 1;
 	}
 
-    label(): string
+    get label(): string
     {
-        return `${this.curColumn}-${this.curRow}`;
+        return (this.customLabel.length != 0) ? this.customLabel : `${this.curColumn}-${this.curRow}`;
     }
 }
 
@@ -151,9 +151,18 @@ class MdcatTable
                 cell.tokenEnd = it.pos + 1;
 
                 var lastToken = it.tokens[it.pos - 1];
-                let str = lastToken.content.trim();
+                var str = lastToken.content.trim();
                 cell.symbol = symbolMap.get(str) ?? MergeSymbol.None;
                 this.hasMergeSymbol ||= (cell.symbol == MergeSymbol.None);
+
+				if (cell.symbol == MergeSymbol.None)
+				{
+					cell.customLabel = str;
+				}
+				else
+				{
+					cell.customLabel = str.slice(1);
+				}
 
 				this.cells.push(cell);
 
@@ -194,7 +203,7 @@ class MdcatTable
 		this.cellMap.clear();
 		for (let cell of this.cells)
 		{
-			this.cellMap.set(cell.label(), cell);
+			this.cellMap.set(cell.label, cell);
 		}
 	}
 
