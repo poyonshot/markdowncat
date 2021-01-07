@@ -25,9 +25,6 @@
 	"main": "./out/extension.js",
 	"contributes": {
 		"markdown.markdownItPlugins": true,
-		"markdown.previewScripts": [
-			"./src/preview.ts"
-		],
 		"configuration": {
 			"type": "object",
 			"title": "markdowncat configuration",

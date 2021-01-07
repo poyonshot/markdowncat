@@ -326,7 +326,7 @@ class MdcatTable
 
 
 
-class MdcatTablePlugin
+export class MdcatTablePlugin
 {
 	md : MarkdownIt;
 	options : MarkdownIt.Options;

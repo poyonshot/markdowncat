@@ -9,6 +9,7 @@ import * as mdcat from "./parser/mdcat_p";
 import { extractExtentision, getEOL } from "./mdcatUtility";
 import { ExclusionHeader } from "./ExclusionHeader";
 import { MdcatSettings } from "./MdcatSettings";
+import { MdcatInclude } from "./MdcatInclude";
 
 
 export class ExpandMdcat
@@ -183,17 +184,31 @@ export class ExpandMdcat
 
     onIncludeCSS(data: Buffer): void
     {
-	    appendFileSync(this.outputFilePath, "<style>" + this.eol)	
-		appendFileSync(this.outputFilePath, data)
-		appendFileSync(this.outputFilePath, "</style>" + this.eol)
+	    appendFileSync(this.outputFilePath, "<style>" + this.eol);	
+		appendFileSync(this.outputFilePath, data);
+		appendFileSync(this.outputFilePath, "</style>" + this.eol);
     }
 
     onIncludeMD(data: Buffer): void
     {
+        let m = new MdcatInclude();
+        m.run(data.toString());
+
         var it = new DocIterator(new DocBufferBinary(data));
 
         while (!it.isEnd())
         {
+            // if (space_p(it)
+            // || eol_p(it)
+            // || block_comment_p(it)
+            // || line_comment_p(it)
+            // || md.header_p(it, (level, header) => this.onMdHeader(level, header))
+            // || md.code_block_p(it, (level, header) => this.onMdHeader(level, header))
+            // ){
+            //     this.onMdOutput(it);
+            //     continue;
+            // }
+            
             // スペース, 改行
             while (space_p(it) || eol_p(it))
             {

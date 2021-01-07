@@ -39,3 +39,32 @@ export function header_p(it: DocIterator, onMatch: (level: number, header: strin
 
     return true;
 }
+
+
+export function code_block_p(it: DocIterator, onMatch: (level: number, header: string) => void): Boolean
+{
+    if ((it.top() != "`") || (it.str(0, 3) != "```"))
+	{
+		return false;
+	}
+
+    var p = it.clone();
+    p.advance(3);
+
+    //改行まで
+    var c = p.top();
+    var count = 0;
+    while (c && (c != "\n"))
+	{
+		++count;
+	 	c = p.char(count);	
+	}
+	let header = p.lineStr.substr(p.pos, count).trim();
+	p.advance(count);
+
+    it.advance(p.pos - it.pos);
+    onMatch(0, header);
+
+
+    return true;
+}
