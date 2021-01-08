@@ -41,7 +41,7 @@ export function header_p(it: DocIterator, onMatch: (level: number, header: strin
 }
 
 
-export function code_block_p(it: DocIterator, onMatch: (level: number, header: string) => void): Boolean
+export function code_block_p(it: DocIterator, name: string | null = null): Boolean
 {
     if ((it.top() != "`") || (it.str(0, 3) != "```"))
 	{
@@ -58,13 +58,79 @@ export function code_block_p(it: DocIterator, onMatch: (level: number, header: s
 	{
 		++count;
 	 	c = p.char(count);	
+    }
+    
+	var str = p.lineStr.substr(p.pos, count).trim();
+    p.advance(count + 1);
+
+    if ((name != null) && (name != str))
+    {
+        return false;
+    }
+    
+    var bMacth = false;
+	do
+	{
+        //改行まで
+        c = p.top();
+        count = 0;
+        while (c && (c != "\n"))
+        {
+            ++count;
+            c = p.char(count);	
+        }
+        
+        str = p.lineStr.substr(p.pos, count).trim();
+        p.advance(count + 1);
+
+        bMacth = (str == "```");
+        if (bMacth)
+        {
+            it.advance(p.pos - it.pos);
+            break;
+        }
+    } while(c);
+    
+	return bMacth;
+}
+
+
+export function comment_p(it: DocIterator): Boolean
+{
+    if ((it.top() != "<") || (it.str(0, 4) != "<!--"))
+	{
+		return false;
 	}
-	let header = p.lineStr.substr(p.pos, count).trim();
-	p.advance(count);
 
+    var p = it.clone();
+    p.advance(4);
+
+    //改行まで
+    var c = p.top();
+    var count = 0;
+    while (c && (c != "\n"))
+	{
+		++count;
+	 	c = p.char(count);	
+    }    
+    p.advance(count + 1);
+
+    
+    var bMacth = false;
+	do
+	{
+        c = p.top();
+        if ((c != "-") || (p.str(0, 3) != "-->"))
+        {
+            p.advance(1);
+            continue;
+        }
+    
+        p.advance(3);
+        break;
+
+    } while(c);
+    
     it.advance(p.pos - it.pos);
-    onMatch(0, header);
-
-
-    return true;
+	return true;
 }

@@ -4,6 +4,10 @@ import { ExpandMdcat } from "./ExpandMdcat";
 
 export default function expandMdcatFile() {
 
+    // if (ExpandMdcat.mdIt == null)
+    // { 
+    // }
+
     let editor = vscode.window.activeTextEditor; // エディタ取得
     if (!editor)
     {
@@ -22,7 +26,13 @@ export default function expandMdcatFile() {
         return;
     }
 
-    mdcat.run();
-    
-    vscode.window.showInformationMessage(mdcat.outputFilePath);
+    try
+    {
+        mdcat.run();
+        vscode.window.showInformationMessage(mdcat.outputFilePath);
+    }
+    catch (err)
+    {
+        vscode.window.showErrorMessage(err.message ?? "error");
+    }    
 }

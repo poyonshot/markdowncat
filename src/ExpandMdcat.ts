@@ -9,7 +9,8 @@ import * as mdcat from "./parser/mdcat_p";
 import { extractExtentision, getEOL } from "./mdcatUtility";
 import { ExclusionHeader } from "./ExclusionHeader";
 import { MdcatSettings } from "./MdcatSettings";
-import { MdcatInclude } from "./MdcatInclude";
+import { MdcatTablePlugin } from "./mdcatTablePlugin";
+import MarkdownIt from "markdown-it";
 
 
 export class ExpandMdcat
@@ -22,6 +23,10 @@ export class ExpandMdcat
     settings = new MdcatSettings();        
     exclusionHeader: ExclusionHeader | null = null;
     includingFile: string | null = null;
+
+    static mdIt: MarkdownIt | null = null;
+    static mdItOp: MarkdownIt.Options = {};
+    static mdItEnv: any = {};
 
     constructor(doc: vscode.TextDocument)
     {
@@ -137,9 +142,12 @@ export class ExpandMdcat
         });
     }
 
-    onOutputMatched(it: DocIterator): void
+    onOutputMatched(it: DocIterator, str: string | null = null): void
     {
-        let str = it.getMatched();
+        if (str == null)
+        {
+            str = it.getMatched();            
+        }
         if (str.length > 0)
         {
             appendFileSync(this.outputFilePath, str)
@@ -191,40 +199,29 @@ export class ExpandMdcat
 
     onIncludeMD(data: Buffer): void
     {
-        let m = new MdcatInclude();
-        m.run(data.toString());
-
         var it = new DocIterator(new DocBufferBinary(data));
 
         while (!it.isEnd())
         {
-            // if (space_p(it)
-            // || eol_p(it)
-            // || block_comment_p(it)
-            // || line_comment_p(it)
-            // || md.header_p(it, (level, header) => this.onMdHeader(level, header))
-            // || md.code_block_p(it, (level, header) => this.onMdHeader(level, header))
-            // ){
-            //     this.onMdOutput(it);
-            //     continue;
-            // }
-            
-            // スペース, 改行
-            while (space_p(it) || eol_p(it))
-            {
-                this.onMdOutput(it);
-            }
-
-            // 見出し
-            if (md.header_p(it, (level, header) => this.onMdHeader(level, header)))
-            {
+            if (space_p(it)
+            || eol_p(it)
+            || md.comment_p(it)
+            || md.header_p(it, (level, header) => this.onMdHeader(level, header))
+            ){
                 this.onMdOutput(it);
                 continue;
             }
 
-            // そのままコピー
-            if  (line_any_p(it))
-            {
+            if (md.code_block_p(it, "mdcat.table")
+            ){
+                let str = this.onMdcatTable(it.getMatched());
+                this.onMdOutput(it, str);
+                continue;
+            }
+            
+            if (md.code_block_p(it)
+            || line_any_p(it)
+            ){
                 this.onMdOutput(it);
                 continue;
             }
@@ -234,7 +231,7 @@ export class ExpandMdcat
 
 
 
-    onMdOutput(it: DocIterator): void
+    onMdOutput(it: DocIterator, str: string | null = null): void
     {
         if (this.exclusionHeader != null)
         {
@@ -242,11 +239,11 @@ export class ExpandMdcat
             {
                 appendFileSync(this.exclusionHeader.workFilePath, it.getMatched());    
             }
-            this.onDiscardMatched(it)
+            this.onDiscardMatched(it);
         }
         else
         {
-            this.onOutputMatched(it);
+            this.onOutputMatched(it, str);
         }
     }
 
@@ -277,6 +274,20 @@ export class ExpandMdcat
                     appendFileSync(this.exclusionHeader.workFilePath, str);    
                 }
             }
+        }
+    }
+
+    onMdcatTable(src: string): string
+    {
+        if (ExpandMdcat.mdIt)
+        {
+            const m = new MdcatTablePlugin(ExpandMdcat.mdIt, ExpandMdcat.mdItOp, ExpandMdcat.mdItEnv);
+            return m.render(src);    
+        }
+        else 
+        {
+            throw { message : "You only need to open the .md file once to convert the mdcat.table code block." };
+            //return src;
         }
     }
 }
