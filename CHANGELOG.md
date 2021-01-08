@@ -1,5 +1,7 @@
 # Change Log
 
+- 0.4.3 add : Convert the mdcat.table code block when generating a markdown file.
+- 0.4.2 add : The settings can be written in the mdcat file.
 - 0.4.1 add : mdcat.table merge cell, custom label.
 - 0.4.0 add : mdcat.table
 - 0.3.0 add : exclusion header, $newpage 
