@@ -1,7 +1,7 @@
 import { notDeepEqual } from "assert";
 import MarkdownIt from "markdown-it";
 import Token from "markdown-it/lib/token";
-import { MdcatTablePlugin, mdcatTablePlugin } from "./mdcatTablePlugin";
+import { MdcatTablePlugin } from "markdown-it-mdcat-table";
 
 
 enum NodeType
@@ -32,7 +32,7 @@ export class MdcatInclude
     constructor()
     {
         this.md = MarkdownIt()
-                    .use(mdcatTablePlugin);
+                    //.use(mdcatTablePlugin);
     }
 
     run(mdStr: string)

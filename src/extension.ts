@@ -6,7 +6,6 @@ import insertNewPage from "./insertNewPage";
 import insertSettings from "./insertSettings";
 import MdcatCompletionProvider from "./mdcatCompletionProvider";
 import FilePathCompletionProvider from "./filePathCompletionProvider";
-import { mdcatTablePlugin } from './mdcatTablePlugin';
 import { ExpandMdcat } from './ExpandMdcat';
 
 
@@ -73,8 +72,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 	return {
 		extendMarkdownIt(md: any) {
-			ExpandMdcat.mdIt = md;
-			return md.use(mdcatTablePlugin);
+			ExpandMdcat.mdIt = md;			
+			return md.use(require("markdown-it-mdcat-table"));
 		}
 	};
 }

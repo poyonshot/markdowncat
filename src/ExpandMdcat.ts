@@ -9,7 +9,6 @@ import * as mdcat from "./parser/mdcat_p";
 import { extractExtentision, getEOL } from "./mdcatUtility";
 import { ExclusionHeader } from "./ExclusionHeader";
 import { MdcatSettings } from "./MdcatSettings";
-import { MdcatTablePlugin } from "./mdcatTablePlugin";
 import MarkdownIt from "markdown-it";
 
 
@@ -281,8 +280,9 @@ export class ExpandMdcat
     {
         if (ExpandMdcat.mdIt)
         {
-            const m = new MdcatTablePlugin(ExpandMdcat.mdIt, ExpandMdcat.mdItOp, ExpandMdcat.mdItEnv);
-            return m.render(src);    
+            return ExpandMdcat.mdIt.render(src, {});
+//            const m = new MdcatTablePlugin(ExpandMdcat.mdIt, ExpandMdcat.mdItOp, ExpandMdcat.mdItEnv);
+//            return m.render(src);    
         }
         else 
         {
