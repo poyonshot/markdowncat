@@ -53,6 +53,16 @@
 					"type": "string",
 					"default": "",
 					"description": "$newpage マクロで展開する文字列"
+				},
+				"markdowncat.table.codeBlockName": {
+					"type": "string",
+					"default": "",
+					"description": "省略すると mdcat.table"
+				},
+				"markdowncat.table.convertHtml": {
+					"type": "bool",
+					"default": false,
+					"description": "mdcat.table を html に変換するか"
 				}
 			}
 		},
@@ -129,6 +139,6 @@
 	"homepage": "https://poyonshot.hatenablog.com/",
 	"dependencies": {
 		"markdown-it": "^12.0.4",
-		"markdown-it-mdcat-table": "^0.1.2"
+		"markdown-it-mdcat-table": "^0.2.1"
 	}
 }

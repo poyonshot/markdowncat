@@ -211,7 +211,7 @@ export class ExpandMdcat
                 continue;
             }
 
-            if (md.code_block_p(it, "mdcat.table")
+            if (md.code_block_p(it, this.settings.mdcatTableName)
             ){
                 let str = this.onMdcatTable(it.getMatched());
                 this.onMdOutput(it, str);
@@ -278,16 +278,18 @@ export class ExpandMdcat
 
     onMdcatTable(src: string): string
     {
+        if (!this.settings.mdcatTableConvertHtml)
+        {
+            return src;
+        }
+
         if (ExpandMdcat.mdIt)
         {
             return ExpandMdcat.mdIt.render(src, {});
-//            const m = new MdcatTablePlugin(ExpandMdcat.mdIt, ExpandMdcat.mdItOp, ExpandMdcat.mdItEnv);
-//            return m.render(src);    
         }
         else 
         {
             throw { message : "You only need to open the .md file once to convert the mdcat.table code block." };
-            //return src;
         }
     }
 }

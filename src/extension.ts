@@ -7,6 +7,7 @@ import insertSettings from "./insertSettings";
 import MdcatCompletionProvider from "./mdcatCompletionProvider";
 import FilePathCompletionProvider from "./filePathCompletionProvider";
 import { ExpandMdcat } from './ExpandMdcat';
+import { MdcatSettings } from './MdcatSettings';
 
 
 function initConfig() {
@@ -70,10 +71,13 @@ export function activate(context: vscode.ExtensionContext) {
 		}),
 	);
 
+	let settings = new MdcatSettings();
+	settings.loadConfiguration();
+
 	return {
 		extendMarkdownIt(md: any) {
 			ExpandMdcat.mdIt = md;			
-			return md.use(require("markdown-it-mdcat-table"));
+			return md.use(require("markdown-it-mdcat-table"), { codeBlockName: settings.mdcatTableName});
 		}
 	};
 }
