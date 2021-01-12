@@ -13,18 +13,23 @@ import { MdcatSettings } from './MdcatSettings';
 function initConfig() {
 	var colorComment = vscode.workspace.getConfiguration().get('markdowncat.color.comment');
 	if (typeof colorComment === "string") {
-		if (colorComment.toLowerCase() === "auto") {
+		let color = colorComment.toLowerCase();
+		if ((color == "auto") || (color == "")) 
+		{
 			const val = vscode.workspace.getConfiguration().get('editor.tokenColorCustomizations.comments');
 			if (typeof val === "string"){
-				colorComment = val;
+				color = val;
 			}
 			else {
-				colorComment = {};
+				color = "";
 			}
 		}
+		if (color == "")
+		{
+			color =  "#30F030";
+		}
+		DocumentDecoration.commentColor = color;
 	}
-	DocumentDecoration.commentColor = (typeof colorComment === "string") ? colorComment : "#30F030";
-
 	
 	var includeExts = vscode.workspace.getConfiguration().get('markdowncat.intellisense.includeExts');
 	if (includeExts instanceof Array) {

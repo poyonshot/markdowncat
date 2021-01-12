@@ -13,7 +13,7 @@ export class MdcatSettings
     {
         return '{' + eol
             + '    "newpage" : null,' + eol
-            + '    "exclusion" : { "headers" : [] }' + eol
+            + '    "exclusion" : { "headers" : [] },' + eol
             + '    "table" : { "convertHtml" : false }' + eol
             + '}' + eol;    
     }

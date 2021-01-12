@@ -1,5 +1,6 @@
 # Change Log
 
+- 0.4.5 add : Fixed bugs.
 - 0.4.4 add : Use markdown-it-mdcat-table plugin. Add mdcat.table settings.
 - 0.4.3 add : Convert the mdcat.table code block when generating a markdown file.
 - 0.4.2 add : The settings can be written in the mdcat file.
