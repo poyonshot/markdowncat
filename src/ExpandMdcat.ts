@@ -47,6 +47,8 @@ export class ExpandMdcat
 
     loadSettings(): string
     {
+        this.settings.loadConfiguration();
+
         var it = new DocIterator(new DocBufferTextDocument(this.doc));
 
         var jsonSrc = "";
@@ -161,7 +163,6 @@ export class ExpandMdcat
 
     onSettings(json: string): string
     {
-        this.settings.loadConfiguration();        
         return this.settings.load(json);
     }
 
