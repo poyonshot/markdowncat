@@ -105,16 +105,8 @@ export function comment_p(it: DocIterator): Boolean
     var p = it.clone();
     p.advance(4);
 
-    //改行まで
+    //コメント終端まで
     var c = p.top();
-    var count = 0;
-    while (c && (c != "\n"))
-	{
-		++count;
-	 	c = p.char(count);	
-    }    
-    p.advance(count + 1);
-
     
     var bMacth = false;
 	do
